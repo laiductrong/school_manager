@@ -11,15 +11,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\ClassScheeduleDTO\" />
-    <Folder Include="DTOs\GradeDTO\" />
-    <Folder Include="DTOs\ManagerDTO\" />
-    <Folder Include="DTOs\TeacherDTO\" />
-    <Folder Include="DTOs\SubjectDTO\" />
-    <Folder Include="DTOs\StudentDTO\" />
-    <Folder Include="DTOs\SalaryDTO\" />
-    <Folder Include="DTOs\PaymentDTO\" />
-  </ItemGroup>
-
 </Project>

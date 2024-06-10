@@ -1,7 +1,8 @@
-﻿
-namespace school_manager.Models
+﻿using school_manager.Models;
+
+namespace school_manager.DTOs.TeacherDTO
 {
-    public class Teacher
+    public class GetTeacher
     {
         public int TeacherId { get; set; }
         public string Name { get; set; }
