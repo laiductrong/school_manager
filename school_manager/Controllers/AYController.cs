@@ -18,5 +18,10 @@ namespace school_manager.Controllers
         public async Task<ActionResult<ServiceReponse<List<GetAY>>>> GetAYs() { 
             return Ok(await _aYService.GetAYs());
         }
+        [HttpGet("GetAYById/{year}")]
+        public async Task<ActionResult<ServiceReponse<GetAY>>> GetAY(int year)
+        {
+            return Ok(await _aYService.GetAYByID(year));
+        }
     }
 }

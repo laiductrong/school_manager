@@ -34,9 +34,22 @@ namespace school_manager.Service.AYService
             return reponse;
         }
 
-        public Task<ServiceReponse<GetAY>> GetAYByID(int year)
+        public async Task<ServiceReponse<GetAY>> GetAYByID(int year)
         {
-            throw new NotImplementedException();
+            var reponse = new ServiceReponse<GetAY>();
+            try
+            {
+                reponse.Data = _mapper.Map<GetAY>(await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == year));
+                reponse.Success = true;
+                reponse.Message = "Success";
+                return reponse;
+            }
+            catch (Exception ex) {
+                reponse.Data = null;
+                reponse.Success = false;
+                reponse.Message = ex.Message;
+                return reponse;
+            }
         }
 
         public async Task<ServiceReponse<List<GetAY>>> GetAYs()
@@ -44,7 +57,13 @@ namespace school_manager.Service.AYService
             var reponse = new ServiceReponse<List<GetAY>>();
             try
             {
-                
+                var data = await _dataContext.AcademicYear.ToListAsync();
+
+                // Ghi log dữ liệu
+                foreach (var year in data)
+                {
+                    Console.WriteLine($"YearId: {year.YearId}, YearName: {year.YearName}");
+                }
                 reponse.Data = (await _dataContext.AcademicYear.ToListAsync()).Select(x => _mapper.Map<GetAY>(x)).ToList();
                 reponse.Success = true;
                 reponse.Message = "Get Success";
