@@ -16,22 +16,64 @@ namespace school_manager.Service.AYService
             _mapper = mapper;
             _dataContext = dataContext;
         }
+
+        public async Task<ServiceReponse<List<GetAY>>> Add(AddAY addAY)
+        {
+            var reponse = new ServiceReponse<List<GetAY>>();
+            try
+            {
+                AcademicYear academicYear = new AcademicYear();
+                academicYear.YearName = addAY.YearName;
+                await _dataContext.AcademicYear.AddAsync(academicYear);
+                await _dataContext.SaveChangeAsync();
+            }catch(Exception ex)
+            {
+                reponse.Data = null;
+                reponse.Success = false;
+                reponse.Message = "Error add Academic Year";
+            }
+            try
+            {
+                reponse.Data = (await _dataContext.AcademicYear.ToListAsync()).Select(x => _mapper.Map<GetAY>(x)).ToList();
+                reponse.Success = true;
+                reponse.Message = "Add success";
+                return reponse;
+            }catch(Exception ex)
+            {
+                reponse.Data = null;
+                reponse.Success = false;
+                reponse.Message = "Add success but Error get Academic Year";
+            }
+        }
         public async Task<ServiceReponse<List<GetAY>>> DeleteAY(int year)
         {
             var reponse = new ServiceReponse<List<GetAY>>();
-            var dataDelete = await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == year);
-            if (dataDelete is null) {
+            try
+            {
+                var dataDelete = await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == year);
+                if (dataDelete is null)
+                {
+                    reponse.Data = null;
+                    reponse.Success = false;
+                    reponse.Message = "Cannot find ID year";
+                    return reponse;
+                }
+                _dataContext.AcademicYear.Remove(dataDelete);
+                await _dataContext.SaveChangesAsync();
+                //get all data after delete
+                reponse.Data = (await _dataContext.AcademicYear.ToListAsync()).Select(x => _mapper.Map<GetAY>(x)).ToList();
+                reponse.Success = true;
+                reponse.Message = "Delete Success";
+                return reponse;
+            }
+            catch(Exception ex)
+            {
                 reponse.Data = null;
                 reponse.Success = false;
-                reponse.Message = "Cannot find ID year";
+                reponse.Message = "Error Delete";
+                return reponse;
             }
-            _dataContext.AcademicYear.Remove(dataDelete);
-            await _dataContext.SaveChangesAsync();
-            //get all data after delete
-            reponse.Data = (await _dataContext.AcademicYear.ToListAsync()).Select(x => _mapper.Map<GetAY>(x)).ToList();
-            reponse.Success = true;
-            reponse.Message = "Delete Success";
-            return reponse;
+            
         }
 
         public async Task<ServiceReponse<GetAY>> GetAYByID(int year)
@@ -57,13 +99,6 @@ namespace school_manager.Service.AYService
             var reponse = new ServiceReponse<List<GetAY>>();
             try
             {
-                var data = await _dataContext.AcademicYear.ToListAsync();
-
-                // Ghi log dữ liệu
-                foreach (var year in data)
-                {
-                    Console.WriteLine($"YearId: {year.YearId}, YearName: {year.YearName}");
-                }
                 reponse.Data = (await _dataContext.AcademicYear.ToListAsync()).Select(x => _mapper.Map<GetAY>(x)).ToList();
                 reponse.Success = true;
                 reponse.Message = "Get Success";
@@ -78,9 +113,49 @@ namespace school_manager.Service.AYService
 
         }
 
-        public Task<ServiceReponse<List<GetAY>>> UpdateAY(UpdateAY updateAY)
+        public async Task<ServiceReponse<List<GetAY>>> UpdateAY(UpdateAY updateAY)
         {
-            throw new NotImplementedException();
+            var reponse = new ServiceReponse<List<GetAY>>();
+            try
+            {
+                var academicUpdate = (await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == updateAY.YearId));
+                if (academicUpdate == null) {
+                    reponse.Data = null;
+                    reponse.Success=false;
+                    reponse.Message = "Can not find Academic Year";
+                    return reponse;
+                }
+                try
+                {
+                    academicUpdate.YearName = updateAY.YearName;
+                    await _dataContext.SaveChangesAsync();
+                    try
+                    {
+                        reponse.Data = (await _dataContext.AcademicYear.ToListAsync()).Select(x => _mapper.Map<GetAY>(x)).ToList();
+                        reponse.Success = true;
+                        reponse.Message = "Update Success";
+                        return reponse;
+                    }
+                    catch (Exception ex)
+                    {
+                        reponse.Data = null;
+                        reponse.Success = false;
+                        reponse.Message = "Update success but error get List Academic Year";
+                        return reponse;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    reponse.Data = null;
+                    reponse.Success = false;
+                    reponse.Message = "Error Update";
+                    return reponse;
+                }            
+            }catch(Exception ex) {
+                reponse.Data = null;
+                reponse.Success = false;
+                reponse.Message = "Error Academic by ID";
+            }
         }
     }
 }
