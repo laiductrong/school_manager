@@ -17,7 +17,7 @@ namespace school_manager.Service.AYService
             _dataContext = dataContext;
         }
 
-        public async Task<ServiceReponse<List<GetAY>>> Add(AddAY addAY)
+        public async Task<ServiceReponse<List<GetAY>>> AddAY(AddAY addAY)
         {
             var reponse = new ServiceReponse<List<GetAY>>();
             try
@@ -25,7 +25,7 @@ namespace school_manager.Service.AYService
                 AcademicYear academicYear = new AcademicYear();
                 academicYear.YearName = addAY.YearName;
                 await _dataContext.AcademicYear.AddAsync(academicYear);
-                await _dataContext.SaveChangeAsync();
+                await _dataContext.SaveChangesAsync();
             }catch(Exception ex)
             {
                 reponse.Data = null;
@@ -43,14 +43,15 @@ namespace school_manager.Service.AYService
                 reponse.Data = null;
                 reponse.Success = false;
                 reponse.Message = "Add success but Error get Academic Year";
+                return reponse ;
             }
         }
-        public async Task<ServiceReponse<List<GetAY>>> DeleteAY(int year)
+        public async Task<ServiceReponse<List<GetAY>>> DeleteAY(int IdYear)
         {
             var reponse = new ServiceReponse<List<GetAY>>();
             try
             {
-                var dataDelete = await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == year);
+                var dataDelete = await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == IdYear);
                 if (dataDelete is null)
                 {
                     reponse.Data = null;
@@ -155,6 +156,7 @@ namespace school_manager.Service.AYService
                 reponse.Data = null;
                 reponse.Success = false;
                 reponse.Message = "Error Academic by ID";
+                return reponse;
             }
         }
     }

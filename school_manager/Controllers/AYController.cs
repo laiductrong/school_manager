@@ -23,5 +23,20 @@ namespace school_manager.Controllers
         {
             return Ok(await _aYService.GetAYByID(year));
         }
+        [HttpPost("AddAcademicYear")]
+        public async Task<ActionResult<ServiceReponse<List<GetAY>>>> AddAY(AddAY addAY)
+        {
+            return Ok(await _aYService.AddAY(addAY));
+        }
+        [HttpDelete("DeleteAcademicYear/{IdYear}")]
+        public async Task<ActionResult<ServiceReponse<List<GetAY>>>> DeleteAY(int IdYear)
+        {
+            return Ok(await _aYService.DeleteAY(IdYear));
+        }
+        [HttpPost("UpdateAY")]
+        public async Task<ActionResult<ServiceReponse<List<GetAY>>>> UpdateAY(UpdateAY updateAY)
+        {
+            return Ok(await _aYService.UpdateAY(updateAY));
+        }
     }
 }
