@@ -12,5 +12,6 @@ namespace school_manager.Models
 
         [Column("year_name")]
         public string YearName { get; set; }
+        public virtual ICollection<Class> Classes { get; set; }
     }
 }
