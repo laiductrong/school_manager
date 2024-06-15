@@ -4,6 +4,7 @@ using System.Security.Claims;
 
 namespace school_manager.Models
 {
+    [Table("AcademicYear")]
     public class AcademicYear
     {
         [Key]

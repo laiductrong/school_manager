@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace school_manager.Models
 {
+    [Table("Class")]
     public class Class
     {
         [Key]
@@ -11,9 +12,7 @@ namespace school_manager.Models
         [Column("class_name")]
         public string ClassName { get; set; }
         [Column("year_id")]
-        public int YearId { get; set; }
-        //[ForeignKey("FK__Class__year_id__412EB0B6")]
-
+        public int AcademicYearYearId { get; set; }
         public virtual AcademicYear AcademicYear { get; set; }
         [Column("teacher_id")]
         public int TeacherId { get; set; }

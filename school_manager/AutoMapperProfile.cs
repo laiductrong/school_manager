@@ -14,9 +14,9 @@ namespace school_manager
             CreateMap<Class, GetClass>()
                 .ForMember(dest => dest.ClassId, opt => opt.MapFrom(src => src.ClassId))
                 .ForMember(dest => dest.ClassName, opt => opt.MapFrom(src => src.ClassName))
-                .ForMember(dest => dest.YearId, opt => opt.MapFrom(src => src.YearId))
+                .ForMember(dest => dest.YearId, opt => opt.MapFrom(src => src.AcademicYearYearId))
                 .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId))
-                .ForMember(dest => dest.AcademicYear, opt => opt.MapFrom(src => src.AcademicYear));
+                .ForMember(dest => dest.YearName, opt => opt.MapFrom(src => src.AcademicYear.YearName));
 
         }
     }

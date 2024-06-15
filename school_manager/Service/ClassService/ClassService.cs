@@ -25,7 +25,7 @@ namespace school_manager.Service.ClassService
                 Class addC = new Class();
                 addC.ClassName = addClass.ClassName;
                 addC.TeacherId = addClass.TeacherId;
-                addC.YearId = addClass.YearId;
+                addC.AcademicYearYearId = addClass.YearId;
                 await _dataContext.Class.AddAsync(addC);
             }
             catch (Exception) {
@@ -89,7 +89,7 @@ namespace school_manager.Service.ClassService
         {
             var reponse = new ServiceReponse<GetClass>();
             var dataFind = await _dataContext.Class
-            .Include(c => c.AcademicYear) // Bao gồm thực thể AcademicYear
+            .Include(x => x.AcademicYear)
             .FirstOrDefaultAsync(x => x.ClassId == classID);
             if (dataFind is null)
             {
@@ -129,7 +129,7 @@ namespace school_manager.Service.ClassService
             var reponse = new ServiceReponse<List<GetClass>>();
             try
             {
-                var data = (await _dataContext.Class.FirstOrDefaultAsync(x => x.YearId == updateClass.ClassId));
+                var data = (await _dataContext.Class.FirstOrDefaultAsync(x => x.AcademicYearYearId == updateClass.ClassId));
                 if (data == null)
                 {
                     reponse.Data = null;
@@ -140,7 +140,7 @@ namespace school_manager.Service.ClassService
                 try
                 {
                     data.ClassName = updateClass.ClassName;
-                    data.YearId = updateClass.YearId;
+                    data.AcademicYearYearId = updateClass.YearId;
                     data.TeacherId = updateClass.TeacherId;
                     await _dataContext.SaveChangesAsync();
                     try
