@@ -7,6 +7,7 @@ namespace school_manager.Service.ClassService
     {
         Task<ServiceReponse<GetClass>> GetClass(int classID);
         Task<ServiceReponse<List<GetClass>>> GetClasss();
+        Task<ServiceReponse<List<GetClass>>> GetClassByIdAY(int idAY);
         Task<ServiceReponse<List<GetClass>>> AddClass(AddClass addClass);
         Task<ServiceReponse<List<GetClass>>> UpdateClass(UpdateClass updateClass);
         Task<ServiceReponse<List<GetClass>>> DeleteClass(int classID);

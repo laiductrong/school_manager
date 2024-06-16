@@ -19,6 +19,12 @@ namespace school_manager.Controllers
         {
             return Ok(await _classService.GetClass(id));
         }
+        [HttpGet("GetClassByYear")]
+        public async Task<ActionResult<ServiceReponse<List<GetClass>>>> GetClassByYear(int yearId)
+        {
+            return Ok(await _classService.GetClassByIdAY(yearId));
+        }
+
         [HttpGet("GetClass")]
         public async Task<ActionResult<ServiceReponse<List<GetClass>>>> GetClass()
         {

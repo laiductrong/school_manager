@@ -129,6 +129,25 @@ namespace school_manager.Service.ClassService
                 return reponse;
             }    
         }
+        public async Task<ServiceReponse<List<GetClass>>> GetClassByIdAY (int idAY)
+        {
+            var reponse = new ServiceReponse<List<GetClass>>();
+            try
+            {
+                var classes = await _dataContext.Class.Include(c => c.AcademicYear).Where(x => x.AcademicYearYearId == idAY).ToListAsync();
+                reponse.Data = classes.Select(c => _mapper.Map<GetClass>(c)).ToList();
+                reponse.Success = true;
+                reponse.Message = "Get Class Success";
+                return reponse;
+            }
+            catch (Exception)
+            {
+                reponse.Data = null;
+                reponse.Success = false;
+                reponse.Message = "Error Get Class";
+                return reponse;
+            }
+        }
 
         public async Task<ServiceReponse<List<GetClass>>> UpdateClass(UpdateClass updateClass)
         {
