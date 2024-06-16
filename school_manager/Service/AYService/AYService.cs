@@ -33,6 +33,7 @@ namespace school_manager.Service.AYService
                 reponse.Data = null;
                 reponse.Success = false;
                 reponse.Message = "Error add Academic Year";
+                return reponse;
             }
             try
             {

@@ -27,25 +27,30 @@ namespace school_manager.Service.ClassService
                 addC.TeacherId = addClass.TeacherId;
                 addC.AcademicYearYearId = addClass.YearId;
                 await _dataContext.Class.AddAsync(addC);
+                await _dataContext.SaveChangesAsync();
             }
             catch (Exception) {
                 reponse.Data = null;
                 reponse.Success = false;
                 reponse.Message = "Error add Class";
+                return reponse ;
             }
             try
             {
-                reponse.Data = (await _dataContext.Class.ToListAsync()).Select(x => _mapper.Map<GetClass>(x)).ToList();
+                var dataClass = await _dataContext.Class.Include(x => x.AcademicYear).ToListAsync();
+                reponse.Data = dataClass.Select(x => _mapper.Map<GetClass>(x)).ToList();
                 reponse.Success = true;
                 reponse.Message = "Add success Class";
                 return reponse;
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 reponse.Data = null;
                 reponse.Success = false;
                 reponse.Message = "Add Class Success but Error Get Class";
                 return reponse;
             }
+
         }
 
         public async Task<ServiceReponse<List<GetClass>>> DeleteClass(int classID)
@@ -64,7 +69,8 @@ namespace school_manager.Service.ClassService
                 await _dataContext.SaveChangesAsync();
                 try
                 {
-                    reponse.Data = (await _dataContext.Class.ToListAsync()).Select(x => _mapper.Map<GetClass>(x)).ToList();
+                    var dataClass = await _dataContext.Class.Include(x => x.AcademicYear).ToListAsync();
+                    reponse.Data = dataClass.Select(x => _mapper.Map<GetClass>(x)).ToList();
                     reponse.Success = true;
                     reponse.Message = "Add success Class";
                     return reponse;
@@ -109,7 +115,7 @@ namespace school_manager.Service.ClassService
             var reponse = new ServiceReponse<List<GetClass>>();
             try
             {
-                var data = await _dataContext.Class.ToListAsync();
+                var data = await _dataContext.Class.Include(x=>x.AcademicYear).ToListAsync();
                 reponse.Data = data.Select(x => _mapper.Map<GetClass>(x)).ToList();
                 reponse.Success = true;
                 reponse.Message = "Get Class Success";
@@ -129,7 +135,7 @@ namespace school_manager.Service.ClassService
             var reponse = new ServiceReponse<List<GetClass>>();
             try
             {
-                var data = (await _dataContext.Class.FirstOrDefaultAsync(x => x.AcademicYearYearId == updateClass.ClassId));
+                var data = (await _dataContext.Class.FirstOrDefaultAsync(x => x.ClassId == updateClass.ClassId));
                 if (data == null)
                 {
                     reponse.Data = null;
@@ -145,7 +151,8 @@ namespace school_manager.Service.ClassService
                     await _dataContext.SaveChangesAsync();
                     try
                     {
-                        reponse.Data = (await _dataContext.Class.ToListAsync()).Select(x => _mapper.Map<GetClass>(x)).ToList();
+                        var dataClass = await _dataContext.Class.Include(x => x.AcademicYear).ToListAsync();
+                        reponse.Data = dataClass.Select(x => _mapper.Map<GetClass>(x)).ToList();
                         reponse.Success = true;
                         reponse.Message = "Update Success";
                         return reponse;
