@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using school_manager.Data;
 using school_manager.Service.AYService;
 using school_manager.Service.ClassService;
+using school_manager.Service.SubjectService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Add Scop
 builder.Services.AddScoped<IAYService, AYService>();
 builder.Services.AddTransient<IClassService, ClassService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
 
 var app = builder.Build();
 
