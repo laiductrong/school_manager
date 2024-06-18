@@ -10,8 +10,8 @@ namespace school_manager.DTOs.TeacherDTO
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public int SubjectId { get; set; }
-        public string SubjectName { get; set; }
+        public int? SubjectId { get; set; }
+        public string? SubjectName { get; set; }
         //public Subject Subject { get; set; }
         //public Manager Manager { get; set; }
         //public List<Class> Classes { get; set; }

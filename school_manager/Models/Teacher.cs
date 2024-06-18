@@ -21,7 +21,7 @@ namespace school_manager.Models
         [Column("email")]
         public string Email { get; set; }
         [Column("subject_id")]
-        public int SubjectId { get; set; }
+        public int? SubjectId { get; set; }
 
         public virtual Subject Subject { get; set; }
         //public Manager Manager { get; set; }

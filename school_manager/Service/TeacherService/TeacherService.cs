@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using school_manager.Controllers;
 using school_manager.Data;
 using school_manager.DTOs.TeacherDTO;
+using school_manager.Models;
 using System.Security.Cryptography.Xml;
 
 namespace school_manager.Service.TeacherService
@@ -16,24 +17,100 @@ namespace school_manager.Service.TeacherService
             _dataContext = dataContext;
             _mapper = mapper;
         }
-        public Task<ServiceReponse<List<GetTeacher>>> AddTeacher(AddTeacher teacher)
+        public async Task<ServiceReponse<List<GetTeacher>>> AddTeacher(AddTeacher teacher)
         {
-            throw new NotImplementedException();
+            var reponse = new ServiceReponse<List<GetTeacher>>();
+            var teacherAdd = new Teacher();
+            teacherAdd.Name = teacher.Name;
+            teacherAdd.Address = teacher.Address;
+            teacherAdd.BirthDate = teacher.BirthDate;
+            teacherAdd.PhoneNumber = teacher.PhoneNumber;
+            teacherAdd.Email = teacher.Email;
+            teacherAdd.SubjectId = teacher.SubjectId;
+            try
+            {
+                await _dataContext.Teacher.AddAsync(teacherAdd);
+                await _dataContext.SaveChangesAsync();
+                try
+                {
+                    var dataTeacher = await _dataContext.Teacher.Include(t => t.Subject).ToListAsync();
+                    if (dataTeacher is null)
+                    {
+                        reponse.Data = null;
+                        reponse.Success = false;
+                        reponse.Message = "Get Teachers Fail";
+                    }
+                    reponse.Data = dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
+                    reponse.Success = true;
+                    reponse.Message = "Get Success";
+                    return reponse;
+                }
+                catch (Exception ex)
+                {
+                    reponse.Data = null;
+                    reponse.Success = false;
+                    reponse.Message = "Add Success but Error Get Teacher";
+                    return reponse;
+                }
+            }
+            catch (Exception ex) {
+                reponse.Data = null;
+                reponse.Success = false;
+                reponse.Message = ex.Message;
+                return reponse;
+            }
         }
 
-        public Task<ServiceReponse<List<GetTeacher>>> DeleteTeacher(int id)
+        public async Task<ServiceReponse<List<GetTeacher>>> DeleteTeacher(int id)
         {
-            throw new NotImplementedException();
+            var reponse = new ServiceReponse<List<GetTeacher>>();
+            try
+            {
+                var teacherDelete = await _dataContext.Teacher.Include(t => t.Subject).FirstOrDefaultAsync(t => t.TeacherId == id);
+                if (teacherDelete is null)
+                {
+                    reponse.Data = null;
+                    reponse.Success = false;
+                    reponse.Message = "Can't find id";
+                    return reponse;
+                }
+                _dataContext.Teacher.Remove(teacherDelete);
+                _dataContext.SaveChanges();
+                try
+                {
+                    var dataTeacher = await _dataContext.Teacher.Include(t => t.Subject).ToListAsync();
+                    if (dataTeacher is null)
+                    {
+                        reponse.Data = null;
+                        reponse.Success = false;
+                        reponse.Message = "Get Teachers Fail";
+                    }
+                    reponse.Data = dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
+                    reponse.Success = true;
+                    reponse.Message = "Delete Success";
+                    return reponse;
+                }
+                catch (Exception ex)
+                {
+                    reponse.Data = null;
+                    reponse.Success = false;
+                    reponse.Message = ex.Message;
+                    return reponse;
+                }
+            }
+            catch (Exception ex) {
+                reponse.Data = null;
+                reponse.Success = false;
+                reponse.Message = ex.Message;
+                return reponse;
+            }
         }
 
         public async Task<ServiceReponse<List<GetTeacher>>> GetAll()
         {
-
-            //var dataSubject = await _dataContext.Subject.ToListAsync();
-            //reponse.Data = dataSubject.Select(s => _mapper.Map<GetSubject>(s)).ToList();
             var reponse = new ServiceReponse<List<GetTeacher>>();
             try {
-                var dataTeacher = await _dataContext.Teacher.ToListAsync();
+                var dataTeacher = await _dataContext.Teacher.Include(t=>t.Subject).ToListAsync();
                 if (dataTeacher is null)
                 {
                     reponse.Data = null;
@@ -42,32 +119,123 @@ namespace school_manager.Service.TeacherService
                 }
                 reponse.Data = dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
                 reponse.Success = true;
-                reponse.Message = dataTeacher.Count().ToString();
+                reponse.Message = "Get Success";
                 return reponse;
             } catch (Exception ex) {
                 reponse.Data = null;
                 reponse.Success = false;
                 reponse.Message = ex.Message;
                 return reponse;
+            }              
+        }
+
+        public async Task<ServiceReponse<GetTeacher>> GetById(int id)
+        {
+            var reponse = new ServiceReponse<GetTeacher>();
+            try
+            {
+                var dataTeacher = await _dataContext.Teacher
+                    .Include(t => t.Subject)
+                    .FirstOrDefaultAsync(t => t.TeacherId == id);
+                if (dataTeacher is null)
+                {
+                    reponse.Data = null;
+                    reponse.Success = true;
+                    reponse.Message = "Can't find id";
+                    return reponse;
+                }
+                reponse.Data = _mapper.Map<GetTeacher>(dataTeacher);
+                reponse.Success = true;
+                reponse.Message = "Find Teacher Success";
+                return reponse;
+            }
+            catch (Exception ex) { 
+                reponse.Data = null;
+                reponse.Success= false;
+                reponse.Message = ex.Message;
+                return reponse ;
+            }
+        }
+
+        public async Task<ServiceReponse<List<GetTeacher>>> GetTeacherBySubject(int subjectId)
+        {
+            var reponse = new ServiceReponse<List<GetTeacher>>();
+            try
+            {
+                var dataTeacher =await _dataContext.Teacher
+                    .Include(t => t.Subject)
+                    .Where(t => t.SubjectId == subjectId).ToListAsync();
+                if (dataTeacher is null || !dataTeacher.Any()) 
+                {
+                    reponse.Data = null;
+                    reponse.Success = true;
+                    reponse.Message = "Don't have Teacher";
+                    return reponse;
+                }
+                reponse.Data= dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
+                reponse.Success = true;
+                reponse.Message = "Find Success";
+                return reponse;
+            }
+            catch (Exception ex) {
+                reponse.Data = null; 
+                reponse.Success = false;
+                reponse.Message = "Error find Teacher";
+                return reponse;
+            }         
+        }
+
+        public async Task<ServiceReponse<List<GetTeacher>>> UpdateTeacher(UpdateTeacher teacher)
+        {
+            var reponse = new ServiceReponse<List <GetTeacher>>();
+            try
+            {
+                var dataUpdate = await _dataContext.Teacher
+                .Include(t => t.Subject)
+                .FirstOrDefaultAsync(t => t.SubjectId == teacher.SubjectId);
+                if (dataUpdate is null)
+                {
+                    reponse.Data = null;
+                    reponse.Success = true;
+                    reponse.Message = "Can't find id";
+                    return reponse;
+                }
+                dataUpdate.SubjectId = teacher.SubjectId;
+                dataUpdate.Name = teacher.Name;
+                dataUpdate.BirthDate = teacher.BirthDate;
+                dataUpdate.PhoneNumber = teacher.PhoneNumber;
+                dataUpdate.Email = teacher.Email;
+                dataUpdate.SubjectId = teacher.SubjectId;
+                await _dataContext.SaveChangesAsync();
+                try
+                {
+                    var dataTeacher = await _dataContext.Teacher.Include(t => t.Subject).ToListAsync();
+                    if (dataTeacher is null)
+                    {
+                        reponse.Data = null;
+                        reponse.Success = false;
+                        reponse.Message = "Get Teachers Fail";
+                    }
+                    reponse.Data = dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
+                    reponse.Success = true;
+                    reponse.Message = "Get Success";
+                    return reponse;
+                }
+                catch (Exception ex)
+                {
+                    reponse.Data = null;
+                    reponse.Success = false;
+                    reponse.Message = "Update Success but Error Get";
+                    return reponse;
+                }
+            }
+            catch (Exception) {
+                reponse.Data = null;
+                reponse.Success = false;
+                reponse.Message = "Error Update Teacher";
+                return reponse;
             }
             
-            
-           
-        }
-
-        public Task<ServiceReponse<GetTeacher>> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ServiceReponse<List<GetTeacher>>> GetTeacherBySubject(int subjectId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ServiceReponse<List<GetTeacher>>> UpdateTeacher(UpdateTeacher teacher)
-        {
-            throw new NotImplementedException();
         }
     }
 }
