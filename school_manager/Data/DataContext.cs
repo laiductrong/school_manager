@@ -11,5 +11,6 @@ namespace school_manager.Data
         public DbSet<AcademicYear> AcademicYear => Set<AcademicYear>();
         public DbSet<Class> Class => Set<Class>();
         public DbSet<Subject> Subject => Set<Subject>();
+        public DbSet<Teacher> Teacher => Set<Teacher>();
     }
 }

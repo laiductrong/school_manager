@@ -11,11 +11,12 @@ namespace school_manager.DTOs.TeacherDTO
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public int SubjectId { get; set; }
-        public Subject Subject { get; set; }
-        public Manager Manager { get; set; }
-        public List<Class> Classes { get; set; }
-        public List<Grade> Grades { get; set; }
-        public Salary Salary { get; set; }
-        public List<ClassSchedule> ClassSchedules { get; set; }
+        public string SubjectName { get; set; }
+        //public Subject Subject { get; set; }
+        //public Manager Manager { get; set; }
+        //public List<Class> Classes { get; set; }
+        //public List<Grade> Grades { get; set; }
+        //public Salary Salary { get; set; }
+        //public List<ClassSchedule> ClassSchedules { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace school_manager.Models
 {
+    [Table("Teacher")]
     public class Teacher
     {
         [Key]
@@ -11,7 +12,7 @@ namespace school_manager.Models
         public int TeacherId { get; set; }
         [Column("name")]
         public string Name { get; set; }
-        [Column("birth_day")]
+        [Column("birth_date")]
         public DateTime BirthDate { get; set; }
         [Column("address")]
         public string Address { get; set; }
@@ -22,9 +23,9 @@ namespace school_manager.Models
         [Column("subject_id")]
         public int SubjectId { get; set; }
 
-        public Subject Subject { get; set; }
+        public virtual Subject Subject { get; set; }
         //public Manager Manager { get; set; }
-        public List<Class> Classes { get; set; }
+        //public List<Class> Classes { get; set; }
         //public List<Grade> Grades { get; set; }
         //public Salary Salary { get; set; }
         //public List<ClassSchedule> ClassSchedules { get; set; }
