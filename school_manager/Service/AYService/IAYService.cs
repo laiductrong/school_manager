@@ -5,10 +5,10 @@ namespace school_manager.Service.AYService
 {
     public interface IAYService
     {
-        Task<ServiceReponse<GetAY>> GetAYByID(int year);
-        Task<ServiceReponse<List<GetAY>>> GetAYs();
-        Task<ServiceReponse<List<GetAY>>> UpdateAY(UpdateAY updateAY);
-        Task<ServiceReponse<List<GetAY>>> DeleteAY(int year);
-        Task<ServiceReponse<List<GetAY>>> AddAY(AddAY addAY);
+        Task<ServiceResponse<GetAY>> GetAYByID(int year);
+        Task<ServiceResponse<List<GetAY>>> GetAYs();
+        Task<ServiceResponse<List<GetAY>>> UpdateAY(UpdateAY updateAY);
+        Task<ServiceResponse<List<GetAY>>> DeleteAY(int year);
+        Task<ServiceResponse<List<GetAY>>> AddAY(AddAY addAY);
     }
 }

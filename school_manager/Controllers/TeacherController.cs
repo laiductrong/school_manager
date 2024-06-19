@@ -15,7 +15,7 @@ namespace school_manager.Controllers
             _teacherService = teacherService;
         }
         [HttpGet("GetTeachers")]
-        public async Task<ActionResult<ServiceReponse<List<GetTeacher>>>> GetTeachers()
+        public async Task<ActionResult<ServiceResponse<List<GetTeacher>>>> GetTeachers()
         {
             var response = await _teacherService.GetAll();
             if (!response.Success)
@@ -26,7 +26,7 @@ namespace school_manager.Controllers
         }
 
         [HttpGet("GetTeacher/{id}")]
-        public async Task<ActionResult<ServiceReponse<GetTeacher>>> GetTeacherById(int id)
+        public async Task<ActionResult<ServiceResponse<GetTeacher>>> GetTeacherById(int id)
         {
             var response = await _teacherService.GetById(id);
             if (!response.Success)
@@ -37,7 +37,7 @@ namespace school_manager.Controllers
         }
 
         [HttpPost("AddTeacher")]
-        public async Task<ActionResult<ServiceReponse<List<GetTeacher>>>> AddTeacher(AddTeacher teacher)
+        public async Task<ActionResult<ServiceResponse<List<GetTeacher>>>> AddTeacher(AddTeacher teacher)
         {
             var response = await _teacherService.AddTeacher(teacher);
             if (!response.Success)
@@ -48,7 +48,7 @@ namespace school_manager.Controllers
         }
 
         [HttpPut("UpdateTeacher")]
-        public async Task<ActionResult<ServiceReponse<List<GetTeacher>>>> UpdateTeacher(UpdateTeacher teacher)
+        public async Task<ActionResult<ServiceResponse<List<GetTeacher>>>> UpdateTeacher(UpdateTeacher teacher)
         {
             var response = await _teacherService.UpdateTeacher(teacher);
             if (!response.Success)
@@ -59,7 +59,7 @@ namespace school_manager.Controllers
         }
 
         [HttpDelete("DeleteTeacher/{id}")]
-        public async Task<ActionResult<ServiceReponse<List<GetTeacher>>>> DeleteTeacher(int id)
+        public async Task<ActionResult<ServiceResponse<List<GetTeacher>>>> DeleteTeacher(int id)
         {
             var response = await _teacherService.DeleteTeacher(id);
             if (!response.Success)
@@ -70,7 +70,7 @@ namespace school_manager.Controllers
         }
 
         [HttpGet("GetTeachersBySubject/{subjectId}")]
-        public async Task<ActionResult<ServiceReponse<List<GetTeacher>>>> GetTeachersBySubject(int subjectId)
+        public async Task<ActionResult<ServiceResponse<List<GetTeacher>>>> GetTeachersBySubject(int subjectId)
         {
             var response = await _teacherService.GetTeacherBySubject(subjectId);
             if (!response.Success)

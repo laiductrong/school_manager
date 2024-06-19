@@ -5,10 +5,10 @@ namespace school_manager.Service.SubjectService
 {
     public interface ISubjectService
     {
-        Task<ServiceReponse<GetSubject>> GetSubjectById(int id);
-        Task<ServiceReponse<List<GetSubject>>> GetSubjects();
-        Task<ServiceReponse<List<GetSubject>>> AddSubject(AddSubject subject);
-        Task<ServiceReponse<List<GetSubject>>> UpdateSubject(UpdateSubject subject);
-        Task<ServiceReponse<List<GetSubject>>> DeleteSubject(int id);
+        Task<ServiceResponse<GetSubject>> GetSubjectById(int id);
+        Task<ServiceResponse<List<GetSubject>>> GetSubjects();
+        Task<ServiceResponse<List<GetSubject>>> AddSubject(AddSubject subject);
+        Task<ServiceResponse<List<GetSubject>>> UpdateSubject(UpdateSubject subject);
+        Task<ServiceResponse<List<GetSubject>>> DeleteSubject(int id);
     }
 }

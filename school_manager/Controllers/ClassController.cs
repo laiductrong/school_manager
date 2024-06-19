@@ -15,33 +15,33 @@ namespace school_manager.Controllers
             _classService = classService;
         }
         [HttpGet("GetById/{id}")]
-        public async Task<ActionResult<ServiceReponse<GetClass>>> GetClassByID(int id)
+        public async Task<ActionResult<ServiceResponse<GetClass>>> GetClassByID(int id)
         {
             return Ok(await _classService.GetClass(id));
         }
         [HttpGet("GetClassByYear")]
-        public async Task<ActionResult<ServiceReponse<List<GetClass>>>> GetClassByYear(int yearId)
+        public async Task<ActionResult<ServiceResponse<List<GetClass>>>> GetClassByYear(int yearId)
         {
             return Ok(await _classService.GetClassByIdAY(yearId));
         }
 
         [HttpGet("GetClass")]
-        public async Task<ActionResult<ServiceReponse<List<GetClass>>>> GetClass()
+        public async Task<ActionResult<ServiceResponse<List<GetClass>>>> GetClass()
         {
             return Ok(await _classService.GetClasss());
         }
         [HttpPost("AddClass")]
-        public async Task<ActionResult<ServiceReponse<List<GetClass>>>> AddClass(AddClass addClass)
+        public async Task<ActionResult<ServiceResponse<List<GetClass>>>> AddClass(AddClass addClass)
         {
             return Ok(await _classService.AddClass(addClass));
         }
         [HttpPost("UpdateClass")]
-        public async Task<ActionResult<ServiceReponse<List<GetClass>>>> UpdateClass(UpdateClass updateClass)
+        public async Task<ActionResult<ServiceResponse<List<GetClass>>>> UpdateClass(UpdateClass updateClass)
         {
             return Ok(await _classService.UpdateClass(updateClass));
         }
         [HttpDelete("DeleteClass")]
-        public async Task<ActionResult<ServiceReponse<List<GetClass>>>> DeleteClass(int classID) { 
+        public async Task<ActionResult<ServiceResponse<List<GetClass>>>> DeleteClass(int classID) { 
             return Ok(await _classService.DeleteClass(classID));
         }
 

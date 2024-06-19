@@ -5,11 +5,11 @@ namespace school_manager.Service.ClassService
 {
     public interface IClassService
     {
-        Task<ServiceReponse<GetClass>> GetClass(int classID);
-        Task<ServiceReponse<List<GetClass>>> GetClasss();
-        Task<ServiceReponse<List<GetClass>>> GetClassByIdAY(int idAY);
-        Task<ServiceReponse<List<GetClass>>> AddClass(AddClass addClass);
-        Task<ServiceReponse<List<GetClass>>> UpdateClass(UpdateClass updateClass);
-        Task<ServiceReponse<List<GetClass>>> DeleteClass(int classID);
+        Task<ServiceResponse<GetClass>> GetClass(int classID);
+        Task<ServiceResponse<List<GetClass>>> GetClasss();
+        Task<ServiceResponse<List<GetClass>>> GetClassByIdAY(int idAY);
+        Task<ServiceResponse<List<GetClass>>> AddClass(AddClass addClass);
+        Task<ServiceResponse<List<GetClass>>> UpdateClass(UpdateClass updateClass);
+        Task<ServiceResponse<List<GetClass>>> DeleteClass(int classID);
     }
 }

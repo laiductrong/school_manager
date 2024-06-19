@@ -17,9 +17,9 @@ namespace school_manager.Service.ClassService
             _mapper = mapper;
             _dataContext = dataContext;
         }
-        public async Task<ServiceReponse<List<GetClass>>> AddClass(AddClass addClass)
+        public async Task<ServiceResponse<List<GetClass>>> AddClass(AddClass addClass)
         {
-            var reponse = new ServiceReponse<List<GetClass>>(); ;
+            var reponse = new ServiceResponse<List<GetClass>>(); ;
             try
             {
                 Class addC = new Class();
@@ -53,9 +53,9 @@ namespace school_manager.Service.ClassService
 
         }
 
-        public async Task<ServiceReponse<List<GetClass>>> DeleteClass(int classID)
+        public async Task<ServiceResponse<List<GetClass>>> DeleteClass(int classID)
         {
-            var reponse = new ServiceReponse<List<GetClass>>();
+            var reponse = new ServiceResponse<List<GetClass>>();
             var dataDelete = await _dataContext.Class.FirstOrDefaultAsync(x => x.ClassId == classID);
             if (dataDelete is null) {
                 reponse.Data = null;
@@ -91,9 +91,9 @@ namespace school_manager.Service.ClassService
             }
         }
 
-        public async Task<ServiceReponse<GetClass>> GetClass(int classID)
+        public async Task<ServiceResponse<GetClass>> GetClass(int classID)
         {
-            var reponse = new ServiceReponse<GetClass>();
+            var reponse = new ServiceResponse<GetClass>();
             var dataFind = await _dataContext.Class
             .Include(x => x.AcademicYear)
             .FirstOrDefaultAsync(x => x.ClassId == classID);
@@ -110,9 +110,9 @@ namespace school_manager.Service.ClassService
             return reponse;
         }
 
-        public async Task<ServiceReponse<List<GetClass>>> GetClasss()
+        public async Task<ServiceResponse<List<GetClass>>> GetClasss()
         {
-            var reponse = new ServiceReponse<List<GetClass>>();
+            var reponse = new ServiceResponse<List<GetClass>>();
             try
             {
                 var data = await _dataContext.Class.Include(x=>x.AcademicYear).ToListAsync();
@@ -129,9 +129,9 @@ namespace school_manager.Service.ClassService
                 return reponse;
             }    
         }
-        public async Task<ServiceReponse<List<GetClass>>> GetClassByIdAY (int idAY)
+        public async Task<ServiceResponse<List<GetClass>>> GetClassByIdAY (int idAY)
         {
-            var reponse = new ServiceReponse<List<GetClass>>();
+            var reponse = new ServiceResponse<List<GetClass>>();
             try
             {
                 var classes = await _dataContext.Class.Include(c => c.AcademicYear).Where(x => x.AcademicYearYearId == idAY).ToListAsync();
@@ -149,9 +149,9 @@ namespace school_manager.Service.ClassService
             }
         }
 
-        public async Task<ServiceReponse<List<GetClass>>> UpdateClass(UpdateClass updateClass)
+        public async Task<ServiceResponse<List<GetClass>>> UpdateClass(UpdateClass updateClass)
         {
-            var reponse = new ServiceReponse<List<GetClass>>();
+            var reponse = new ServiceResponse<List<GetClass>>();
             try
             {
                 var data = (await _dataContext.Class.FirstOrDefaultAsync(x => x.ClassId == updateClass.ClassId));

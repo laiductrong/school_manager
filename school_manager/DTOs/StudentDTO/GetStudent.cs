@@ -11,8 +11,8 @@ namespace school_manager.DTOs.StudentDTO
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public int ClassId { get; set; }
-        public Class Class { get; set; }
-        public List<Grade> Grades { get; set; }
-        public List<Payment> Payments { get; set; }
+        public string ClassName { get; set; }
+        //public List<Grade> Grades { get; set; }
+        //public List<Payment> Payments { get; set; }
     }
 }

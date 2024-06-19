@@ -17,9 +17,9 @@ namespace school_manager.Service.SubjectService
             _mapper = mapper;
             _dataContext = dataContext;
         }
-        public async Task<ServiceReponse<List<GetSubject>>> AddSubject(AddSubject subject)
+        public async Task<ServiceResponse<List<GetSubject>>> AddSubject(AddSubject subject)
         {
-            var reponse = new ServiceReponse<List<GetSubject>>();
+            var reponse = new ServiceResponse<List<GetSubject>>();
             Subject addSubject = new Subject();
             addSubject.Name = subject.Name;
             try
@@ -48,9 +48,9 @@ namespace school_manager.Service.SubjectService
             }
         }
 
-        public async Task<ServiceReponse<List<GetSubject>>> DeleteSubject(int id)
+        public async Task<ServiceResponse<List<GetSubject>>> DeleteSubject(int id)
         {
-            var reponse = new ServiceReponse<List<GetSubject>>();
+            var reponse = new ServiceResponse<List<GetSubject>>();
             var dataSubject = await _dataContext.Subject.FirstOrDefaultAsync(s => s.SubjectId == id);
             if (dataSubject is null)
             {
@@ -87,9 +87,9 @@ namespace school_manager.Service.SubjectService
             }
         }
 
-        public async Task<ServiceReponse<List<GetSubject>>> GetSubjects()
+        public async Task<ServiceResponse<List<GetSubject>>> GetSubjects()
         {
-           var reponse = new ServiceReponse<List<GetSubject>>();
+           var reponse = new ServiceResponse<List<GetSubject>>();
             try
             {
                 var dataSubject = await _dataContext.Subject.ToListAsync();
@@ -105,9 +105,9 @@ namespace school_manager.Service.SubjectService
             return reponse;
         }
 
-        public async Task<ServiceReponse<GetSubject>> GetSubjectById(int id)
+        public async Task<ServiceResponse<GetSubject>> GetSubjectById(int id)
         {
-            var reponse = new ServiceReponse<GetSubject>();
+            var reponse = new ServiceResponse<GetSubject>();
             var dataSubject = await _dataContext.Subject.FirstOrDefaultAsync(s => s.SubjectId == id);
             if (dataSubject is null) {
                 reponse.Data = null;
@@ -121,9 +121,9 @@ namespace school_manager.Service.SubjectService
             return reponse;
         }
 
-        public async Task<ServiceReponse<List<GetSubject>>> UpdateSubject(UpdateSubject subject)
+        public async Task<ServiceResponse<List<GetSubject>>> UpdateSubject(UpdateSubject subject)
         {
-            var reponse = new ServiceReponse<List<GetSubject>>();
+            var reponse = new ServiceResponse<List<GetSubject>>();
             try
             {
                 var dataUpdate = await _dataContext.Subject.FirstOrDefaultAsync(s => s.SubjectId == subject.SubjectId);

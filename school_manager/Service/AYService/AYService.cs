@@ -18,9 +18,9 @@ namespace school_manager.Service.AYService
             _dataContext = dataContext;
         }
 
-        public async Task<ServiceReponse<List<GetAY>>> AddAY(AddAY addAY)
+        public async Task<ServiceResponse<List<GetAY>>> AddAY(AddAY addAY)
         {
-            var reponse = new ServiceReponse<List<GetAY>>();
+            var reponse = new ServiceResponse<List<GetAY>>();
             try
             {
                 AcademicYear academicYear = new AcademicYear();
@@ -50,9 +50,9 @@ namespace school_manager.Service.AYService
                 return reponse;
             }
         }
-        public async Task<ServiceReponse<List<GetAY>>> DeleteAY(int IdYear)
+        public async Task<ServiceResponse<List<GetAY>>> DeleteAY(int IdYear)
         {
-            var reponse = new ServiceReponse<List<GetAY>>();
+            var reponse = new ServiceResponse<List<GetAY>>();
             var dataDelete = await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == IdYear);
             if (dataDelete is null)
             {
@@ -79,9 +79,9 @@ namespace school_manager.Service.AYService
             }
         }
 
-        public async Task<ServiceReponse<GetAY>> GetAYByID(int year)
+        public async Task<ServiceResponse<GetAY>> GetAYByID(int year)
         {
-            var reponse = new ServiceReponse<GetAY>();
+            var reponse = new ServiceResponse<GetAY>();
             try
             {
                 reponse.Data = _mapper.Map<GetAY>(await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == year));
@@ -98,9 +98,9 @@ namespace school_manager.Service.AYService
             }
         }
 
-        public async Task<ServiceReponse<List<GetAY>>> GetAYs()
+        public async Task<ServiceResponse<List<GetAY>>> GetAYs()
         {
-            var reponse = new ServiceReponse<List<GetAY>>();
+            var reponse = new ServiceResponse<List<GetAY>>();
             try
             {
                 reponse.Data = (await _dataContext.AcademicYear.ToListAsync()).Select(x => _mapper.Map<GetAY>(x)).ToList();
@@ -118,9 +118,9 @@ namespace school_manager.Service.AYService
 
         }
 
-        public async Task<ServiceReponse<List<GetAY>>> UpdateAY(UpdateAY updateAY)
+        public async Task<ServiceResponse<List<GetAY>>> UpdateAY(UpdateAY updateAY)
         {
-            var reponse = new ServiceReponse<List<GetAY>>();
+            var reponse = new ServiceResponse<List<GetAY>>();
             try
             {
                 var academicUpdate = (await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == updateAY.YearId));

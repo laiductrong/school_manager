@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using school_manager.DTOs.AcademicYearDTO;
 using school_manager.DTOs.ClassDTO;
+using school_manager.DTOs.StudentDTO;
 using school_manager.DTOs.SubjectDTO;
 using school_manager.DTOs.TeacherDTO;
 using school_manager.Models;
@@ -31,6 +32,15 @@ namespace school_manager
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.SubjectId, opt => opt.MapFrom(src => src.SubjectId))
                 .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Subject.Name));
+            CreateMap<Student, GetStudent>()
+               .ForMember(dest => dest.StudentId, opt => opt.MapFrom(src => src.StudentId))
+               .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+               .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
+               .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+               .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+               .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+               .ForMember(dest => dest.ClassId, opt => opt.MapFrom(src => src.ClassId))
+               .ForMember(dest => dest.ClassName, opt => opt.MapFrom(src => src.Class.ClassName));
 
         }
     }

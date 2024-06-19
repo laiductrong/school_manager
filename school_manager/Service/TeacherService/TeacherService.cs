@@ -17,9 +17,9 @@ namespace school_manager.Service.TeacherService
             _dataContext = dataContext;
             _mapper = mapper;
         }
-        public async Task<ServiceReponse<List<GetTeacher>>> AddTeacher(AddTeacher teacher)
+        public async Task<ServiceResponse<List<GetTeacher>>> AddTeacher(AddTeacher teacher)
         {
-            var reponse = new ServiceReponse<List<GetTeacher>>();
+            var reponse = new ServiceResponse<List<GetTeacher>>();
             var teacherAdd = new Teacher();
             teacherAdd.Name = teacher.Name;
             teacherAdd.Address = teacher.Address;
@@ -37,15 +37,16 @@ namespace school_manager.Service.TeacherService
                     if (dataTeacher is null)
                     {
                         reponse.Data = null;
-                        reponse.Success = false;
+                        reponse.Success = true;
                         reponse.Message = "Get Teachers Fail";
+                        return reponse;
                     }
                     reponse.Data = dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
                     reponse.Success = true;
                     reponse.Message = "Get Success";
                     return reponse;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     reponse.Data = null;
                     reponse.Success = false;
@@ -61,16 +62,16 @@ namespace school_manager.Service.TeacherService
             }
         }
 
-        public async Task<ServiceReponse<List<GetTeacher>>> DeleteTeacher(int id)
+        public async Task<ServiceResponse<List<GetTeacher>>> DeleteTeacher(int id)
         {
-            var reponse = new ServiceReponse<List<GetTeacher>>();
+            var reponse = new ServiceResponse<List<GetTeacher>>();
             try
             {
                 var teacherDelete = await _dataContext.Teacher.Include(t => t.Subject).FirstOrDefaultAsync(t => t.TeacherId == id);
                 if (teacherDelete is null)
                 {
                     reponse.Data = null;
-                    reponse.Success = false;
+                    reponse.Success = true;
                     reponse.Message = "Can't find id";
                     return reponse;
                 }
@@ -82,8 +83,9 @@ namespace school_manager.Service.TeacherService
                     if (dataTeacher is null)
                     {
                         reponse.Data = null;
-                        reponse.Success = false;
+                        reponse.Success = true;
                         reponse.Message = "Get Teachers Fail";
+                        return reponse ;
                     }
                     reponse.Data = dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
                     reponse.Success = true;
@@ -106,16 +108,17 @@ namespace school_manager.Service.TeacherService
             }
         }
 
-        public async Task<ServiceReponse<List<GetTeacher>>> GetAll()
+        public async Task<ServiceResponse<List<GetTeacher>>> GetAll()
         {
-            var reponse = new ServiceReponse<List<GetTeacher>>();
+            var reponse = new ServiceResponse<List<GetTeacher>>();
             try {
                 var dataTeacher = await _dataContext.Teacher.Include(t=>t.Subject).ToListAsync();
                 if (dataTeacher is null)
                 {
                     reponse.Data = null;
-                    reponse.Success = false;
+                    reponse.Success = true;
                     reponse.Message = "Get Teachers Fail";
+                    return reponse;
                 }
                 reponse.Data = dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
                 reponse.Success = true;
@@ -129,9 +132,9 @@ namespace school_manager.Service.TeacherService
             }              
         }
 
-        public async Task<ServiceReponse<GetTeacher>> GetById(int id)
+        public async Task<ServiceResponse<GetTeacher>> GetById(int id)
         {
-            var reponse = new ServiceReponse<GetTeacher>();
+            var reponse = new ServiceResponse<GetTeacher>();
             try
             {
                 var dataTeacher = await _dataContext.Teacher
@@ -157,9 +160,9 @@ namespace school_manager.Service.TeacherService
             }
         }
 
-        public async Task<ServiceReponse<List<GetTeacher>>> GetTeacherBySubject(int subjectId)
+        public async Task<ServiceResponse<List<GetTeacher>>> GetTeacherBySubject(int subjectId)
         {
-            var reponse = new ServiceReponse<List<GetTeacher>>();
+            var reponse = new ServiceResponse<List<GetTeacher>>();
             try
             {
                 var dataTeacher =await _dataContext.Teacher
@@ -177,7 +180,7 @@ namespace school_manager.Service.TeacherService
                 reponse.Message = "Find Success";
                 return reponse;
             }
-            catch (Exception ex) {
+            catch (Exception) {
                 reponse.Data = null; 
                 reponse.Success = false;
                 reponse.Message = "Error find Teacher";
@@ -185,9 +188,9 @@ namespace school_manager.Service.TeacherService
             }         
         }
 
-        public async Task<ServiceReponse<List<GetTeacher>>> UpdateTeacher(UpdateTeacher teacher)
+        public async Task<ServiceResponse<List<GetTeacher>>> UpdateTeacher(UpdateTeacher teacher)
         {
-            var reponse = new ServiceReponse<List <GetTeacher>>();
+            var reponse = new ServiceResponse<List <GetTeacher>>();
             try
             {
                 var dataUpdate = await _dataContext.Teacher
@@ -213,15 +216,16 @@ namespace school_manager.Service.TeacherService
                     if (dataTeacher is null)
                     {
                         reponse.Data = null;
-                        reponse.Success = false;
+                        reponse.Success = true;
                         reponse.Message = "Get Teachers Fail";
+                        return reponse;
                     }
                     reponse.Data = dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
                     reponse.Success = true;
                     reponse.Message = "Get Success";
                     return reponse;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     reponse.Data = null;
                     reponse.Success = false;
