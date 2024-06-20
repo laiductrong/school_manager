@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using school_manager.Data;
 using school_manager.Service.AYService;
 using school_manager.Service.ClassService;
+using school_manager.Service.GradeService;
 using school_manager.Service.StudentService;
 using school_manager.Service.SubjectService;
 using school_manager.Service.TeacherService;
@@ -38,6 +39,7 @@ builder.Services.AddTransient<IClassService, ClassService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IGradeService, GradeService>();
 
 var app = builder.Build();
 
