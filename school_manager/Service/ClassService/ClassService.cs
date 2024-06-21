@@ -19,7 +19,7 @@ namespace school_manager.Service.ClassService
         }
         public async Task<ServiceResponse<List<GetClass>>> AddClass(AddClass addClass)
         {
-            var reponse = new ServiceResponse<List<GetClass>>(); ;
+            var response = new ServiceResponse<List<GetClass>>(); ;
             try
             {
                 Class addC = new Class();
@@ -30,38 +30,38 @@ namespace school_manager.Service.ClassService
                 await _dataContext.SaveChangesAsync();
             }
             catch (Exception) {
-                reponse.Data = null;
-                reponse.Success = false;
-                reponse.Message = "Error add Class";
-                return reponse ;
+                response.Data = null;
+                response.Success = false;
+                response.Message = "Error add Class";
+                return response ;
             }
             try
             {
                 var dataClass = await _dataContext.Class.Include(x => x.AcademicYear).ToListAsync();
-                reponse.Data = dataClass.Select(x => _mapper.Map<GetClass>(x)).ToList();
-                reponse.Success = true;
-                reponse.Message = "Add success Class";
-                return reponse;
+                response.Data = dataClass.Select(x => _mapper.Map<GetClass>(x)).ToList();
+                response.Success = true;
+                response.Message = "Add success Class";
+                return response;
             }
             catch (Exception)
             {
-                reponse.Data = null;
-                reponse.Success = false;
-                reponse.Message = "Add Class Success but Error Get Class";
-                return reponse;
+                response.Data = null;
+                response.Success = false;
+                response.Message = "Add Class Success but Error Get Class";
+                return response;
             }
 
         }
 
         public async Task<ServiceResponse<List<GetClass>>> DeleteClass(int classID)
         {
-            var reponse = new ServiceResponse<List<GetClass>>();
+            var response = new ServiceResponse<List<GetClass>>();
             var dataDelete = await _dataContext.Class.FirstOrDefaultAsync(x => x.ClassId == classID);
             if (dataDelete is null) {
-                reponse.Data = null;
-                reponse.Success = false;
-                reponse.Message = "Can not find Class";
-                return reponse;
+                response.Data = null;
+                response.Success = false;
+                response.Message = "Can not find Class";
+                return response;
             }
             try
             {
@@ -70,97 +70,97 @@ namespace school_manager.Service.ClassService
                 try
                 {
                     var dataClass = await _dataContext.Class.Include(x => x.AcademicYear).ToListAsync();
-                    reponse.Data = dataClass.Select(x => _mapper.Map<GetClass>(x)).ToList();
-                    reponse.Success = true;
-                    reponse.Message = "Add success Class";
-                    return reponse;
+                    response.Data = dataClass.Select(x => _mapper.Map<GetClass>(x)).ToList();
+                    response.Success = true;
+                    response.Message = "Add success Class";
+                    return response;
                 }
                 catch (Exception)
                 {
-                    reponse.Data = null;
-                    reponse.Success = false;
-                    reponse.Message = "Delete Class Success but Error Get Class";
-                    return reponse;
+                    response.Data = null;
+                    response.Success = false;
+                    response.Message = "Delete Class Success but Error Get Class";
+                    return response;
                 }
             }
             catch (Exception) {
-                reponse.Data = null;
-                reponse.Success = false;
-                reponse.Message = "Error Delete";
-                return reponse;
+                response.Data = null;
+                response.Success = false;
+                response.Message = "Error Delete";
+                return response;
             }
         }
 
         public async Task<ServiceResponse<GetClass>> GetClass(int classID)
         {
-            var reponse = new ServiceResponse<GetClass>();
+            var response = new ServiceResponse<GetClass>();
             var dataFind = await _dataContext.Class
             .Include(x => x.AcademicYear)
             .FirstOrDefaultAsync(x => x.ClassId == classID);
             if (dataFind is null)
             {
-                reponse.Data = null;
-                reponse.Success = false;
-                reponse.Message = "Can not find Class";
-                return reponse;
+                response.Data = null;
+                response.Success = false;
+                response.Message = "Can not find Class";
+                return response;
             }
-            reponse.Data = _mapper.Map<GetClass>(dataFind);
-            reponse.Success = true;
-            reponse.Message = "Find Success";
-            return reponse;
+            response.Data = _mapper.Map<GetClass>(dataFind);
+            response.Success = true;
+            response.Message = "Find Success";
+            return response;
         }
 
         public async Task<ServiceResponse<List<GetClass>>> GetClasss()
         {
-            var reponse = new ServiceResponse<List<GetClass>>();
+            var response = new ServiceResponse<List<GetClass>>();
             try
             {
                 var data = await _dataContext.Class.Include(x=>x.AcademicYear).ToListAsync();
-                reponse.Data = data.Select(x => _mapper.Map<GetClass>(x)).ToList();
-                reponse.Success = true;
-                reponse.Message = "Get Class Success";
-                return reponse;
+                response.Data = data.Select(x => _mapper.Map<GetClass>(x)).ToList();
+                response.Success = true;
+                response.Message = "Get Class Success";
+                return response;
             }
             catch (Exception)
             {
-                reponse.Data = null;
-                reponse.Success = false;
-                reponse.Message = "Error Get Class";
-                return reponse;
+                response.Data = null;
+                response.Success = false;
+                response.Message = "Error Get Class";
+                return response;
             }    
         }
         public async Task<ServiceResponse<List<GetClass>>> GetClassByIdAY (int idAY)
         {
-            var reponse = new ServiceResponse<List<GetClass>>();
+            var response = new ServiceResponse<List<GetClass>>();
             try
             {
                 var classes = await _dataContext.Class.Include(c => c.AcademicYear).Where(x => x.AcademicYearYearId == idAY).ToListAsync();
-                reponse.Data = classes.Select(c => _mapper.Map<GetClass>(c)).ToList();
-                reponse.Success = true;
-                reponse.Message = "Get Class Success";
-                return reponse;
+                response.Data = classes.Select(c => _mapper.Map<GetClass>(c)).ToList();
+                response.Success = true;
+                response.Message = "Get Class Success";
+                return response;
             }
             catch (Exception)
             {
-                reponse.Data = null;
-                reponse.Success = false;
-                reponse.Message = "Error Get Class";
-                return reponse;
+                response.Data = null;
+                response.Success = false;
+                response.Message = "Error Get Class";
+                return response;
             }
         }
 
         public async Task<ServiceResponse<List<GetClass>>> UpdateClass(UpdateClass updateClass)
         {
-            var reponse = new ServiceResponse<List<GetClass>>();
+            var response = new ServiceResponse<List<GetClass>>();
             try
             {
                 var data = (await _dataContext.Class.FirstOrDefaultAsync(x => x.ClassId == updateClass.ClassId));
                 if (data == null)
                 {
-                    reponse.Data = null;
-                    reponse.Success = false;
-                    reponse.Message = "Can not find Class";
-                    return reponse;
+                    response.Data = null;
+                    response.Success = false;
+                    response.Message = "Can not find Class";
+                    return response;
                 }
                 try
                 {
@@ -171,33 +171,33 @@ namespace school_manager.Service.ClassService
                     try
                     {
                         var dataClass = await _dataContext.Class.Include(x => x.AcademicYear).ToListAsync();
-                        reponse.Data = dataClass.Select(x => _mapper.Map<GetClass>(x)).ToList();
-                        reponse.Success = true;
-                        reponse.Message = "Update Success";
-                        return reponse;
+                        response.Data = dataClass.Select(x => _mapper.Map<GetClass>(x)).ToList();
+                        response.Success = true;
+                        response.Message = "Update Success";
+                        return response;
                     }
                     catch (Exception)
                     {
-                        reponse.Data = null;
-                        reponse.Success = false;
-                        reponse.Message = "Update success but error Get List Class";
-                        return reponse;
+                        response.Data = null;
+                        response.Success = false;
+                        response.Message = "Update success but error Get List Class";
+                        return response;
                     }
                 }
                 catch (Exception)
                 {
-                    reponse.Data = null;
-                    reponse.Success = false;
-                    reponse.Message = "Error Update";
-                    return reponse;
+                    response.Data = null;
+                    response.Success = false;
+                    response.Message = "Error Update";
+                    return response;
                 }
             }
             catch (Exception)
             {
-                reponse.Data = null;
-                reponse.Success = false;
-                reponse.Message = "Error Class by ID";
-                return reponse;
+                response.Data = null;
+                response.Success = false;
+                response.Message = "Error Class by ID";
+                return response;
             }
         }
     }
