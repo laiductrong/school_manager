@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using school_manager.Controllers;
 using school_manager.Data;
 using school_manager.DTOs.GradeDTO;
+using school_manager.Models;
 
 namespace school_manager.Service.GradeService
 {
@@ -15,34 +16,226 @@ namespace school_manager.Service.GradeService
             _mapper = mapper;
             _dataContext = dataContext;
         }
-        public Task<ServiceResponse<List<GetGrade>>> AddGrade(AddGrade addGrade)
+        public async Task<ServiceResponse<List<GetGrade>>> AddGrade(AddGrade addGrade)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetGrade>>();
+            try
+            {
+                var add = new Grade();
+                add.TeacherId = addGrade.TeacherId;
+                add.StudentId = addGrade.StudentId;
+                add.Score = addGrade.Score;
+                await _dataContext.Grade.AddAsync(add);
+                await _dataContext.SaveChangesAsync();
+                try
+                {
+                    var dataGrade = await _dataContext.Grade
+                        .Include(g => g.Student)
+                        .Include(g => g.Teacher)
+                            .ThenInclude(t => t.Subject)
+                        .ToListAsync();
+                    if (dataGrade == null || !dataGrade.Any())
+                    {
+                        response.Data = new List<GetGrade>();
+                        response.Success = true;
+                        response.Message = "Empty list";
+                        return response;
+                    }
+                    response.Data = dataGrade.Select(g => _mapper.Map<GetGrade>(g)).ToList();
+                    response.Success = true;
+                    response.Message = "Add Success";
+                    return response;
+
+                }
+                catch (Exception ex)
+                {
+                    response.Data = null;
+                    response.Success = true;
+                    response.Message = "GET Error";
+                    return response;
+                }
+            }
+            catch (Exception ex) {
+                response.Data = null;
+                response.Success = true;
+                response.Message = "Add Error";
+                return response;
+            }
         }
 
-        public Task<ServiceResponse<List<GetGrade>>> DeleteGrade(int GradeId)
+        public async Task<ServiceResponse<List<GetGrade>>> DeleteGrade(int GradeId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetGrade>>();
+            try
+            {
+                var dataDelete = await _dataContext.Grade
+                    .Include(g => g.Student)
+                    .Include(g => g.Teacher)
+                        .ThenInclude(g => g.Subject)
+                        .FirstOrDefaultAsync(g => g.GradeId == GradeId);
+                if (dataDelete == null)
+                {
+                    response.Data = null; // Initialize with an empty list
+                    response.Success = true;
+                    response.Message = "Can't find id";
+                    return response;
+                }
+                try
+                {
+                    //delete
+                    _dataContext.Remove(dataDelete);
+                    await _dataContext.SaveChangesAsync();
+                    //get list
+                    var dataGrade = await _dataContext.Grade
+                        .Include(g => g.Student)
+                        .Include(g => g.Teacher)
+                            .ThenInclude(t => t.Subject)
+                        .ToListAsync();
+                    response.Data = dataGrade.Select(g => _mapper.Map<GetGrade>(g)).ToList();
+                    response.Success = true;
+                    response.Message = "Delete success";
+                }
+                catch (Exception ex)
+                {
+                    response.Data = null;
+                    response.Success = true;
+                    response.Message = ex.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = true;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public Task<ServiceResponse<GetGrade>> GetGrade(int id)
+        public async Task<ServiceResponse<GetGrade>> GetGrade(int id)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<GetGrade>();
+            try
+            {
+                var dataGrade = await _dataContext.Grade
+                    .Include(g => g.Student)
+                    .Include(g => g.Teacher)
+                        .ThenInclude(g => g.Subject)
+                        .FirstOrDefaultAsync(g => g.GradeId == id);
+                if (dataGrade == null)
+                {
+                    response.Data = null; // Initialize with an empty list
+                    response.Success = true;
+                    response.Message = "Empty list";
+                    return response;
+                }
+                response.Data = _mapper.Map<GetGrade>(dataGrade);
+                response.Success = true;
+                response.Message = "Get Score success";
+
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = true;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public Task<ServiceResponse<List<GetGrade>>> GetGradeBySubject(int subjectId)
+        public async Task<ServiceResponse<List<GetGrade>>> GetGradeBySubject(int subjectId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetGrade>>();
+            try
+            {
+                var dataGrade = await _dataContext.Grade
+                    .Include(g => g.Student)
+                    .Include(g => g.Teacher)
+                        .ThenInclude(g => g.Subject)
+                        .Where(g => g.Teacher.SubjectId == subjectId)
+                    .ToListAsync();
+                if (dataGrade == null || !dataGrade.Any())
+                {
+                    response.Data = new List<GetGrade>(); // Initialize with an empty list
+                    response.Success = true;
+                    response.Message = "Empty list";
+                    return response;
+                }
+                response.Data = dataGrade.Select(g => _mapper.Map<GetGrade>(g)).ToList();
+                response.Success = true;
+                response.Message = "Get Score success";
+
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = true;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public Task<ServiceResponse<List<GetGrade>>> GetGradeBySutdent(int studentId)
+        public async Task<ServiceResponse<List<GetGrade>>> GetGradeByStudent(int studentId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetGrade>>();
+            try
+            {
+                var dataGrade = await _dataContext.Grade
+                .Where(g => g.StudentId == studentId) // Apply filter for the specific teacher
+                    .Include(g => g.Student)
+                    .Include(g => g.Teacher)
+                        .ThenInclude(g => g.Subject)
+                    .ToListAsync();
+                if (dataGrade == null || !dataGrade.Any())
+                {
+                    response.Data = new List<GetGrade>(); // Initialize with an empty list
+                    response.Success = true;
+                    response.Message = "Empty list";
+                    return response;
+                }
+                response.Data = dataGrade.Select(g => _mapper.Map<GetGrade>(g)).ToList();
+                response.Success = true;
+                response.Message = "Get Score success";
+
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = true;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public Task<ServiceResponse<List<GetGrade>>> GetGradeByTeacher(int teacherId)
+        public async Task<ServiceResponse<List<GetGrade>>> GetGradeByTeacher(int teacherId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetGrade>>();
+            try
+            {
+                var dataGrade = await _dataContext.Grade
+                    .Where(g => g.TeacherId == teacherId) // Apply filter for the specific teacher
+                    .Include(g => g.Student)
+                    .Include(g => g.Teacher)
+                        .ThenInclude(g => g.Subject)
+                    .ToListAsync();
+                if (dataGrade == null || !dataGrade.Any())
+                {
+                    response.Data = new List<GetGrade>(); // Initialize with an empty list
+                    response.Success = true;
+                    response.Message = "Empty list";
+                    return response;
+                }
+                response.Data = dataGrade.Select(g => _mapper.Map<GetGrade>(g)).ToList();
+                response.Success = true;
+                response.Message = "Get Score success";
+
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = true;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public async Task<ServiceResponse<List<GetGrade>>> GetGrades()
@@ -55,6 +248,13 @@ namespace school_manager.Service.GradeService
                     .Include(g => g.Teacher)
                         .ThenInclude(t => t.Subject)
                     .ToListAsync();
+                if (dataGrade == null || !dataGrade.Any())
+                {
+                    response.Data = new List<GetGrade>(); // Initialize with an empty list
+                    response.Success = true;
+                    response.Message = "Empty list";
+                    return response;
+                }
                 response.Data = dataGrade.Select(g => _mapper.Map<GetGrade>(g)).ToList();
                 response.Success = true;
                 response.Message = "Get Score success";
@@ -68,9 +268,58 @@ namespace school_manager.Service.GradeService
             return response;
         }
 
-        public Task<ServiceResponse<List<GetGrade>>> UpdateGrade(UpdateGrade updateGrade)
+        public async Task<ServiceResponse<List<GetGrade>>> UpdateGrade(UpdateGrade updateGrade)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetGrade>>();
+            try
+            {
+                // Retrieve the existing grade
+                var grade = await _dataContext.Grade.FirstOrDefaultAsync(g => g.GradeId == updateGrade.GradeId);
+                if (grade == null)
+                {
+                    response.Data = null;
+                    response.Success = false;
+                    response.Message = "Grade not found.";
+                    return response;
+                }
+
+                // Update the grade properties
+                grade.TeacherId = updateGrade.TeacherId;
+                grade.StudentId = updateGrade.StudentId;
+                grade.Score = updateGrade.Score;
+
+                // Save changes to the database
+                _dataContext.Grade.Update(grade);
+                await _dataContext.SaveChangesAsync();
+
+                // Retrieve the updated list of grades
+                var dataGrade = await _dataContext.Grade
+                    .Include(g => g.Student)
+                    .Include(g => g.Teacher)
+                        .ThenInclude(t => t.Subject)
+                    .ToListAsync();
+
+                if (dataGrade == null || !dataGrade.Any())
+                {
+                    response.Data = new List<GetGrade>();
+                    response.Success = true;
+                    response.Message = "Empty list";
+                    return response;
+                }
+
+                response.Data = dataGrade.Select(g => _mapper.Map<GetGrade>(g)).ToList();
+                response.Success = true;
+                response.Message = "Update Success";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = "Update Error: " + ex.Message;
+                return response;
+            }
         }
+
     }
 }
