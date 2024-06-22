@@ -7,10 +7,10 @@ namespace school_manager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SubjectService : ControllerBase
+    public class SubjectController : ControllerBase
     {
         private readonly ISubjectService _subjectService;
-        public SubjectService(ISubjectService subjectService)
+        public SubjectController(ISubjectService subjectService)
         {
             _subjectService = subjectService;
         }
