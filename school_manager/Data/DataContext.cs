@@ -14,5 +14,7 @@ namespace school_manager.Data
         public DbSet<Teacher> Teacher => Set<Teacher>();
         public DbSet<Student> Student => Set<Student>();
         public DbSet<Grade> Grade => Set<Grade>();
+        public DbSet<Manager> Manager => Set<Manager>();
+        
     }
 }

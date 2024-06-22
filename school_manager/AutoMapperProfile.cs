@@ -2,6 +2,7 @@
 using school_manager.DTOs.AcademicYearDTO;
 using school_manager.DTOs.ClassDTO;
 using school_manager.DTOs.GradeDTO;
+using school_manager.DTOs.ManagerDTO;
 using school_manager.DTOs.StudentDTO;
 using school_manager.DTOs.SubjectDTO;
 using school_manager.DTOs.TeacherDTO;
@@ -49,6 +50,16 @@ namespace school_manager
                 .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId))
                 .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => src.Teacher.Name))
                 .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Teacher.Subject.Name));
+            CreateMap<Manager, GetManager>()
+                .ForMember(dest => dest.ManagerId, opt => opt.MapFrom(src => src.ManagerId))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Teacher.Name))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Teacher.Address))
+                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.Teacher.BirthDate))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Teacher.PhoneNumber))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Teacher.Email))
+                .ForMember(dest => dest.SubjectId, opt => opt.MapFrom(src => src.Teacher.SubjectId))
+                .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Teacher.Subject.Name));
+            
 
         }
     }
