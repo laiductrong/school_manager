@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using school_manager.Controllers;
 using school_manager.Data;
 using school_manager.DTOs.UserAccountDTO;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace school_manager.Service.UserAccountService
 {
@@ -10,10 +15,12 @@ namespace school_manager.Service.UserAccountService
     {
         private readonly DataContext _dataContext;
         private readonly IMapper _mapper;
-        public AccountService(DataContext dataContext, IMapper mapper)
+        private readonly IConfiguration _configuration;
+        public AccountService(DataContext dataContext, IMapper mapper, IConfiguration configuration)
         {
             _dataContext = dataContext;
             _mapper = mapper;
+            _configuration = configuration;
         }
         public Task<ServiceResponse<List<GetAccount>>> Delete(string id)
         {
@@ -119,14 +126,66 @@ namespace school_manager.Service.UserAccountService
             return response;
         }
 
-        public Task<ServiceResponse<GetAccount>> Login(string username, string password)
+        public async Task<ServiceResponse<string>> Login(string username, string password)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<string>();
+            var user = await _dataContext.UserAccount.Include(a=>a.Role).FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+            if (user == null)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = "not found username";
+                return response;
+            }
+            var userSuccess = _mapper.Map<GetAccount>(user);
+            response.Data = CreateToken(userSuccess);
+            response.Success = true;
+            response.Message = "Success";
+            return response;
         }
 
         public Task<ServiceResponse<List<GetAccount>>> Register(AddAccount addAccount)
         {
             throw new NotImplementedException();
         }
+        private string CreateToken(GetAccount user)
+        {
+            // Lấy ID nào không null đầu tiên
+            var id = user.StudentId ?? user.TeacherId ?? user.ManagerId;
+
+            // Nếu id vẫn null, là ADMIN
+            if (id == null)
+            {
+                id = null;
+            }
+
+            // Tạo danh sách các claims
+            var claims = new List<Claim>
+            {
+                new Claim("username", user.Username),
+                new Claim(ClaimTypes.Role, user.RoleName),
+                new Claim("id", id.Value.ToString()) // id.Value vì id là nullable int
+            };
+
+            // Lấy khóa bí mật từ cấu hình
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                _configuration.GetSection("AppSettings:Token").Value!));
+
+            // Tạo thông tin ký
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            // Tạo token
+            var token = new JwtSecurityToken(
+                    claims: claims,
+                    expires: DateTime.Now.AddDays(1),
+                    signingCredentials: creds
+                );
+
+            // Tạo chuỗi JWT từ token
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
+        }
+
     }
 }
