@@ -23,5 +23,15 @@ namespace school_manager.Controllers
             }
             return Ok(response);
         }
+        [HttpGet("StudentAccounts")]
+        public async Task<ActionResult<List<GetAccount>>> GetStudentAccounts()
+        {
+            var response = await _accountService.GetAccountStudents();
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }

@@ -20,9 +20,29 @@ namespace school_manager.Service.UserAccountService
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<List<GetAccount>>> GetAccountManagers()
+        public async Task<ServiceResponse<List<GetAccount>>> GetAccountManagers()
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetAccount>>();
+            try
+            {
+                var accounts = await _dataContext.UserAccount.Include(a => a.Role).Where(a => a.ManagerId != null).ToListAsync();
+                if (accounts is null || !accounts.Any())
+                {
+                    response.Data = null;
+                    response.Success = true;
+                    response.Message = "Account Emty";
+                }
+                response.Data = accounts.Select(a => _mapper.Map<GetAccount>(a)).ToList();
+                response.Success = true;
+                response.Message = "Get Success";
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = true;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public async Task<ServiceResponse<List<GetAccount>>> GetAccounts()
@@ -49,14 +69,54 @@ namespace school_manager.Service.UserAccountService
             return response;
         }
 
-        public Task<ServiceResponse<List<GetAccount>>> GetAccountStudents()
+        public async Task<ServiceResponse<List<GetAccount>>> GetAccountStudents()
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetAccount>>();
+            try
+            {
+                var accounts = await _dataContext.UserAccount.Include(a => a.Role).Where(a=> a.StudentId!= null).ToListAsync();
+                if (accounts is null || !accounts.Any())
+                {
+                    response.Data = null;
+                    response.Success = true;
+                    response.Message = "Account Emty";
+                }
+                response.Data = accounts.Select(a => _mapper.Map<GetAccount>(a)).ToList();
+                response.Success = true;
+                response.Message = "Get Success";
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = true;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public Task<ServiceResponse<List<GetAccount>>> GetAccountTeachera()
+        public async Task<ServiceResponse<List<GetAccount>>> GetAccountTeachera()
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetAccount>>();
+            try
+            {
+                var accounts = await _dataContext.UserAccount.Include(a => a.Role).Where(a => a.TeacherId != null).ToListAsync();
+                if (accounts is null || !accounts.Any())
+                {
+                    response.Data = null;
+                    response.Success = true;
+                    response.Message = "Account Emty";
+                }
+                response.Data = accounts.Select(a => _mapper.Map<GetAccount>(a)).ToList();
+                response.Success = true;
+                response.Message = "Get Success";
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = true;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public Task<ServiceResponse<GetAccount>> Login(string username, string password)
