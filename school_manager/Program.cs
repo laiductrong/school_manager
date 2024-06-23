@@ -7,6 +7,7 @@ using school_manager.Service.ManagerService;
 using school_manager.Service.StudentService;
 using school_manager.Service.SubjectService;
 using school_manager.Service.TeacherService;
+using school_manager.Service.UserAccountService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,7 @@ builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IManagerService, ManagerService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 

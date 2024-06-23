@@ -6,6 +6,7 @@ using school_manager.DTOs.ManagerDTO;
 using school_manager.DTOs.StudentDTO;
 using school_manager.DTOs.SubjectDTO;
 using school_manager.DTOs.TeacherDTO;
+using school_manager.DTOs.UserAccountDTO;
 using school_manager.Models;
 namespace school_manager
 {
@@ -59,7 +60,15 @@ namespace school_manager
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Teacher.Email))
                 .ForMember(dest => dest.SubjectId, opt => opt.MapFrom(src => src.Teacher.SubjectId))
                 .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Teacher.Subject.Name));
-            
+            CreateMap<UserAccount, GetAccount>()
+                  .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                  .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
+                  .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
+                  .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.RoleId))
+                  .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role != null ? src.Role.RoleName : "N/A"))
+                  .ForMember(dest => dest.StudentId, opt => opt.MapFrom(src => src.StudentId))
+                  .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId))
+                  .ForMember(dest => dest.ManagerId, opt => opt.MapFrom(src => src.ManagerId));
 
         }
     }
