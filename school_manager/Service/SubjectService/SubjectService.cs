@@ -20,8 +20,7 @@ namespace school_manager.Service.SubjectService
         public async Task<ServiceResponse<List<GetSubject>>> AddSubject(AddSubject subject)
         {
             var reponse = new ServiceResponse<List<GetSubject>>();
-            Subject addSubject = new Subject();
-            addSubject.Name = subject.Name;
+            Subject addSubject = _mapper.Map<Subject>(subject);
             try
             {
                 await _dataContext.AddAsync(addSubject);

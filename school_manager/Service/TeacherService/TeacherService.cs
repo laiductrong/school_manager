@@ -20,13 +20,7 @@ namespace school_manager.Service.TeacherService
         public async Task<ServiceResponse<List<GetTeacher>>> AddTeacher(AddTeacher teacher)
         {
             var response = new ServiceResponse<List<GetTeacher>>();
-            var teacherAdd = new Teacher();
-            teacherAdd.Name = teacher.Name;
-            teacherAdd.Address = teacher.Address;
-            teacherAdd.BirthDate = teacher.BirthDate;
-            teacherAdd.PhoneNumber = teacher.PhoneNumber;
-            teacherAdd.Email = teacher.Email;
-            teacherAdd.SubjectId = teacher.SubjectId;
+            var teacherAdd = _mapper.Map<Teacher>(teacher);
             try
             {
                 await _dataContext.Teacher.AddAsync(teacherAdd);

@@ -20,7 +20,7 @@ namespace school_manager.Models
         [Column("email")]
         public string Email { get; set; }
         [Column("class_id")]
-        public int ClassId { get; set; }
+        public int? ClassId { get; set; }
         public virtual Class Class { get; set; }
         //public List<Grade> Grades { get; set; }
         //public List<Payment> Payments { get; set; }

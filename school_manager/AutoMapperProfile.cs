@@ -70,6 +70,32 @@ namespace school_manager
                   .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId))
                   .ForMember(dest => dest.ManagerId, opt => opt.MapFrom(src => src.ManagerId));
 
+            //Mapper for function Add
+            CreateMap<AddAccount, UserAccount>()
+                //.ForMember(dest => dest.UserId , null)
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
+                .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.RoleId))
+                .ForMember(dest => dest.StudentId, opt => opt.MapFrom(src => src.StudentId))
+                .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId))
+                .ForMember(dest => dest.ManagerId, opt => opt.MapFrom(src => src.ManagerId ));
+            CreateMap<AddTeacher, Teacher>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.SubjectId, opt => opt.MapFrom(src => src.SubjectId));
+            CreateMap<AddSubject, Subject>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+            CreateMap<AddStudent, Student>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.ClassId, opt => opt.MapFrom(src => src.ClassId));
+
         }
     }
 }

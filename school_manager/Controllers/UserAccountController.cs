@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using school_manager.DTOs.UserAccountDTO;
+using school_manager.Models;
 using school_manager.Service.UserAccountService;
 
 namespace school_manager.Controllers
@@ -34,9 +35,9 @@ namespace school_manager.Controllers
             return Ok(response);
         }
         [HttpGet("Login")]
-        public async Task<ActionResult<ServiceResponse<string>>> Login(string username, string password)
+        public async Task<ActionResult<ServiceResponse<string>>> Login(AccountLogin account)
         {
-            var response = await _accountService.Login(username,password);
+            var response = await _accountService.Login(account);
             if (!response.Success)
             {
                 return BadRequest(response);

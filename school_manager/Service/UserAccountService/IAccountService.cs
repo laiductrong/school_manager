@@ -1,5 +1,6 @@
 ﻿using school_manager.Controllers;
 using school_manager.DTOs.UserAccountDTO;
+using school_manager.Models;
 
 namespace school_manager.Service.UserAccountService
 {
@@ -9,8 +10,8 @@ namespace school_manager.Service.UserAccountService
         Task<ServiceResponse<List<GetAccount>>> GetAccountStudents();
         Task<ServiceResponse<List<GetAccount>>> GetAccountTeachera();
         Task<ServiceResponse<List<GetAccount>>> GetAccountManagers();
-        Task<ServiceResponse<string>> Login(string username, string password);
-        Task<ServiceResponse<List<GetAccount>>> Register(AddAccount addAccount);
+        Task<ServiceResponse<string>> Login(AccountLogin account);
+        Task<ServiceResponse<GetAccount>> Register(AddAccount addAccount);
         Task<ServiceResponse<List<GetAccount>>> Delete(string id);
     }
 }

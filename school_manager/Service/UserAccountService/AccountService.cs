@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using school_manager.Controllers;
 using school_manager.Data;
 using school_manager.DTOs.UserAccountDTO;
+using school_manager.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -126,8 +127,10 @@ namespace school_manager.Service.UserAccountService
             return response;
         }
 
-        public async Task<ServiceResponse<string>> Login(string username, string password)
+        public async Task<ServiceResponse<string>> Login(AccountLogin account)
         {
+            string username = account.UserName;
+            string password = account.Password;
             var response = new ServiceResponse<string>();
             var user = await _dataContext.UserAccount.Include(a=>a.Role).FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
             if (user == null)
@@ -144,9 +147,46 @@ namespace school_manager.Service.UserAccountService
             return response;
         }
 
-        public Task<ServiceResponse<List<GetAccount>>> Register(AddAccount addAccount)
+        public async Task<ServiceResponse<GetAccount>> Register(AddAccount addAccount)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<GetAccount>();
+            var add = _mapper.Map<UserAccount>(addAccount);
+            try
+            {
+                await _dataContext.UserAccount.AddAsync(add);
+                await _dataContext.SaveChangesAsync();
+                try
+                {
+                    var data = await _dataContext.UserAccount.Include(a => a.Role)
+                        .FirstOrDefaultAsync(a =>
+                            a.Username == addAccount.Username &&
+                            a.Password == addAccount.Password &&
+                            a.RoleId == addAccount.RoleId
+                        );
+                    if (data == null) {
+                        response.Data = null;
+                        response.Success = true;
+                        response.Message = "Register Fail";
+                        return response;
+                    }
+                    response.Data = _mapper.Map<GetAccount>(data);
+                    response.Success = true;
+                    response.Message = "Register Success";
+                }
+                catch (Exception)
+                {
+                    response.Data = null;
+                    response.Success = true;
+                    response.Message = "Register Fail";
+                }
+            }
+            catch (Exception ex) { 
+                response.Data = null;
+                response.Success= false;
+                response.Message = ex.Message;
+            }
+            return response;
+
         }
         private string CreateToken(GetAccount user)
         {

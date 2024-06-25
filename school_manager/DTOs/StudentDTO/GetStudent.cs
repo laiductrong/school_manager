@@ -10,8 +10,8 @@ namespace school_manager.DTOs.StudentDTO
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public int ClassId { get; set; }
-        public string ClassName { get; set; }
+        public int? ClassId { get; set; }
+        public string? ClassName { get; set; }
         //public List<Grade> Grades { get; set; }
         //public List<Payment> Payments { get; set; }
     }
