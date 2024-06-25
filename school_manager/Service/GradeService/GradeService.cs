@@ -21,10 +21,7 @@ namespace school_manager.Service.GradeService
             var response = new ServiceResponse<List<GetGrade>>();
             try
             {
-                var add = new Grade();
-                add.TeacherId = addGrade.TeacherId;
-                add.StudentId = addGrade.StudentId;
-                add.Score = addGrade.Score;
+                var add = _mapper.Map<Grade>(addGrade);
                 await _dataContext.Grade.AddAsync(add);
                 await _dataContext.SaveChangesAsync();
                 try

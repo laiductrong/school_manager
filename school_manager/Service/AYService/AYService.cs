@@ -23,8 +23,7 @@ namespace school_manager.Service.AYService
             var response = new ServiceResponse<List<GetAY>>();
             try
             {
-                AcademicYear academicYear = new AcademicYear();
-                academicYear.YearName = addAY.YearName;
+                AcademicYear academicYear = _mapper.Map<AcademicYear>(addAY);
                 await _dataContext.AcademicYear.AddAsync(academicYear);
                 await _dataContext.SaveChangesAsync();
             }

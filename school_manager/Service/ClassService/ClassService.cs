@@ -22,10 +22,7 @@ namespace school_manager.Service.ClassService
             var response = new ServiceResponse<List<GetClass>>(); ;
             try
             {
-                Class addC = new Class();
-                addC.ClassName = addClass.ClassName;
-                addC.TeacherId = addClass.TeacherId;
-                addC.AcademicYearYearId = addClass.YearId;
+                Class addC = _mapper.Map<Class>(addClass);
                 await _dataContext.Class.AddAsync(addC);
                 await _dataContext.SaveChangesAsync();
             }

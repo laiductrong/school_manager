@@ -3,6 +3,8 @@ using school_manager.DTOs.AcademicYearDTO;
 using school_manager.DTOs.ClassDTO;
 using school_manager.DTOs.GradeDTO;
 using school_manager.DTOs.ManagerDTO;
+using school_manager.DTOs.PaymentDTO;
+using school_manager.DTOs.SalaryDTO;
 using school_manager.DTOs.StudentDTO;
 using school_manager.DTOs.SubjectDTO;
 using school_manager.DTOs.TeacherDTO;
@@ -95,6 +97,31 @@ namespace school_manager
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.ClassId, opt => opt.MapFrom(src => src.ClassId));
+            CreateMap<AddSalary, Salary>()
+                .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId))
+                .ForMember(dest => dest.BaseRate, opt => opt.MapFrom(src => src.BaseRate))
+                .ForMember(dest => dest.TeachingHours, opt => opt.MapFrom(src => src.TeachingHours))
+                .ForMember(dest => dest.Bonus, opt => opt.MapFrom(src => src.Bonus));
+            CreateMap<AddPayment, Payment>()
+                .ForMember(dest => dest.StudentId, opt => opt.MapFrom(src => src.StudentId))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+            CreateMap<AddManager, Manager>()
+                .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId));
+            CreateMap<AddGrade, Grade>()
+                .ForMember(dest => dest.StudentId, opt => opt.MapFrom(src => src.StudentId))
+                .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId))
+                .ForMember(dest => dest.Score, opt => opt.MapFrom(src => src.Score));
+            CreateMap<AddClass, Class>()
+                .ForMember(dest => dest.ClassName, opt => opt.MapFrom(src => src.ClassName))
+                .ForMember(dest => dest.AcademicYearYearId, opt => opt.MapFrom(src => src.YearId))
+                .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId));
+            CreateMap<AddAY, AcademicYear>()
+                .ForMember(dest => dest.YearName, opt => opt.MapFrom(src => src.YearName));
+                
+
 
         }
     }

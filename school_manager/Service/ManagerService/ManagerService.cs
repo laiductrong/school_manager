@@ -22,11 +22,7 @@ namespace school_manager.Service.ManagerService
 
             try
             {
-                var newManager = new Manager
-                {
-                    TeacherId = manager.TeacherId,
-                    // Assign other properties as needed
-                };
+                var newManager = _mapper.Map<Manager>(manager);
 
                 await _dataContext.Manager.AddAsync(newManager);
                 await _dataContext.SaveChangesAsync();
