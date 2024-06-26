@@ -54,7 +54,7 @@ namespace school_manager.Service.GradeService
             }
             catch (Exception ex) {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = "Add Error";
                 return response;
             }
@@ -102,7 +102,7 @@ namespace school_manager.Service.GradeService
             catch (Exception ex)
             {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = ex.Message;
             }
             return response;
@@ -133,7 +133,7 @@ namespace school_manager.Service.GradeService
             catch (Exception ex)
             {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = ex.Message;
             }
             return response;
@@ -165,7 +165,7 @@ namespace school_manager.Service.GradeService
             catch (Exception ex)
             {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = ex.Message;
             }
             return response;
@@ -197,7 +197,7 @@ namespace school_manager.Service.GradeService
             catch (Exception ex)
             {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = ex.Message;
             }
             return response;
@@ -229,7 +229,7 @@ namespace school_manager.Service.GradeService
             catch (Exception ex)
             {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = ex.Message;
             }
             return response;
@@ -259,7 +259,7 @@ namespace school_manager.Service.GradeService
             }
             catch (Exception ex) {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = ex.Message;
             }
             return response;

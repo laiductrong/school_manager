@@ -34,7 +34,7 @@ namespace school_manager.Service.SubjectService
                 }
                 catch (Exception) {
                     reponse.Data = null;
-                    reponse.Success = false;
+                    reponse.Success = true;
                     reponse.Message = "Add Success but Error Get Subject";
                 }
                 return reponse;
@@ -73,7 +73,7 @@ namespace school_manager.Service.SubjectService
                 catch (Exception)
                 {
                     reponse.Data = null;
-                    reponse.Success = false;
+                    reponse.Success = true;
                     reponse.Message = "Delete success but Error Get Subjects";
                     return reponse;
                 }

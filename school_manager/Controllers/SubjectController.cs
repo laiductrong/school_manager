@@ -10,34 +10,45 @@ namespace school_manager.Controllers
     public class SubjectController : ControllerBase
     {
         private readonly ISubjectService _subjectService;
+
         public SubjectController(ISubjectService subjectService)
         {
             _subjectService = subjectService;
         }
+
         [HttpGet("GetById/{id}")]
-        public async Task<ActionResult<ServiceResponse<GetSubject>>> GetSubjectById(int id) { 
-            return Ok(await _subjectService.GetSubjectById(id));
+        public async Task<ActionResult<ServiceResponse<GetSubject>>> GetSubjectById(int id)
+        {
+            var response = await _subjectService.GetSubjectById(id);
+            return response.Success ? Ok(response) : NotFound(response);
         }
+
         [HttpGet("GetSubjects")]
         public async Task<ActionResult<ServiceResponse<List<GetSubject>>>> GetSubjects()
         {
-            return Ok(await _subjectService.GetSubjects());
+            var response = await _subjectService.GetSubjects();
+            return response.Success ? Ok(response) : BadRequest(response);
         }
+
         [HttpPost("AddSubject")]
         public async Task<ActionResult<ServiceResponse<List<GetSubject>>>> AddSubject(AddSubject addSubject)
         {
-            return Ok(await _subjectService.AddSubject(addSubject));
+            var response = await _subjectService.AddSubject(addSubject);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
+
         [HttpPost("Update")]
         public async Task<ActionResult<ServiceResponse<List<GetSubject>>>> UpdateSubject(UpdateSubject updateSubject)
         {
-            return Ok(await _subjectService.UpdateSubject(updateSubject));
+            var response = await _subjectService.UpdateSubject(updateSubject);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
-        [HttpDelete("Delete")]
+
+        [HttpDelete("Delete/{subjectId}")]
         public async Task<ActionResult<ServiceResponse<List<GetSubject>>>> DeleteSubject(int subjectId)
         {
-            return Ok(await (_subjectService.DeleteSubject(subjectId)));
+            var response = await _subjectService.DeleteSubject(subjectId);
+            return response.Success ? Ok(response) : NotFound(response);
         }
-        
     }
 }

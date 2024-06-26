@@ -17,91 +17,59 @@ namespace school_manager.Controllers
             _gradeService = gradeService;
         }
         [HttpGet("GetGrades")]
-    public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGrades()
-    {
-        var response = await _gradeService.GetGrades();
-        if (!response.Success)
+        public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGrades()
         {
-            return BadRequest(response);
+            var response = await _gradeService.GetGrades();
+            return response.Success ? Ok(response) : BadRequest(response);
         }
-        return Ok(response);
-    }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<ServiceResponse<GetGrade>>> GetGrade(int id)
-    {
-        var response = await _gradeService.GetGrade(id);
-        if (!response.Success)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ServiceResponse<GetGrade>>> GetGrade(int id)
         {
-            return NotFound(response);
+            var response = await _gradeService.GetGrade(id);
+            return response.Success ? Ok(response) : NotFound(response);
         }
-        return Ok(response);
-    }
 
-    [HttpGet("ByStudent/{studentId}")]
-    public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGradeByStudent(int studentId)
-    {
-        var response = await _gradeService.GetGradeByStudent(studentId);
-        if (!response.Success)
+        [HttpGet("ByStudent/{studentId}")]
+        public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGradeByStudent(int studentId)
         {
-            return BadRequest(response);
+            var response = await _gradeService.GetGradeByStudent(studentId);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
-        return Ok(response);
-    }
 
-    [HttpGet("ByTeacher/{teacherId}")]
-    public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGradeByTeacher(int teacherId)
-    {
-        var response = await _gradeService.GetGradeByTeacher(teacherId);
-        if (!response.Success)
+        [HttpGet("ByTeacher/{teacherId}")]
+        public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGradeByTeacher(int teacherId)
         {
-            return BadRequest(response);
+            var response = await _gradeService.GetGradeByTeacher(teacherId);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
-        return Ok(response);
-    }
 
-    [HttpGet("BySubject/{subjectId}")]
-    public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGradeBySubject(int subjectId)
-    {
-        var response = await _gradeService.GetGradeBySubject(subjectId);
-        if (!response.Success)
+        [HttpGet("BySubject/{subjectId}")]
+        public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGradeBySubject(int subjectId)
         {
-            return BadRequest(response);
+            var response = await _gradeService.GetGradeBySubject(subjectId);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
-        return Ok(response);
-    }
 
-    [HttpPost("AddGrade")]
-    public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> AddGrade(AddGrade addGrade)
-    {
-        var response = await _gradeService.AddGrade(addGrade);
-        if (!response.Success)
+        [HttpPost("AddGrade")]
+        public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> AddGrade(AddGrade addGrade)
         {
-            return BadRequest(response);
+            var response = await _gradeService.AddGrade(addGrade);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
-        return Ok(response);
-    }
 
-    [HttpPut("UpdateGrade")]
-    public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> UpdateGrade(UpdateGrade updateGrade)
-    {
-        var response = await _gradeService.UpdateGrade(updateGrade);
-        if (!response.Success)
+        [HttpPut("UpdateGrade")]
+        public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> UpdateGrade(UpdateGrade updateGrade)
         {
-            return BadRequest(response);
+            var response = await _gradeService.UpdateGrade(updateGrade);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
-        return Ok(response);
-    }
 
-    [HttpDelete("{gradeId}")]
-    public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> DeleteGrade(int gradeId)
-    {
-        var response = await _gradeService.DeleteGrade(gradeId);
-        if (!response.Success)
+        [HttpDelete("{gradeId}")]
+        public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> DeleteGrade(int gradeId)
         {
-            return BadRequest(response);
+            var response = await _gradeService.DeleteGrade(gradeId);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
-        return Ok(response);
     }
     }
-}

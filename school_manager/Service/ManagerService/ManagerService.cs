@@ -57,7 +57,7 @@ namespace school_manager.Service.ManagerService
 
                 if (managerToDelete == null)
                 {
-                    response.Success = false;
+                    response.Success = true;
                     response.Message = "Manager not found.";
                     return response;
                 }
@@ -96,7 +96,7 @@ namespace school_manager.Service.ManagerService
 
                 if (manager == null)
                 {
-                    response.Success = false;
+                    response.Success = true;
                     response.Message = "Manager not found.";
                 }
                 else
@@ -150,7 +150,7 @@ namespace school_manager.Service.ManagerService
 
                 if (managerToUpdate == null)
                 {
-                    response.Success = false;
+                    response.Success = true;
                     response.Message = "Manager not found.";
                     return response;
                 }

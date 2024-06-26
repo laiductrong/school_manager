@@ -10,40 +10,31 @@ namespace school_manager.Controllers
     public class ManagerController : ControllerBase
     {
         private readonly IManagerService _managerService;
+
         public ManagerController(IManagerService managerService)
         {
             _managerService = managerService;
         }
-        [HttpGet("GetManager")]
-        public async Task<ActionResult<ServiceResponse<GetManager>>> GetManagers(int managerId)
+
+        [HttpGet("GetManager/{managerId}")]
+        public async Task<ActionResult<ServiceResponse<GetManager>>> GetManager(int managerId)
         {
             var response = await _managerService.GetManager(managerId);
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
+
         [HttpGet("GetManagers")]
         public async Task<ActionResult<ServiceResponse<List<GetManager>>>> GetManagers()
         {
             var response = await _managerService.GetManagers();
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpPost("AddManager")]
         public async Task<ActionResult<ServiceResponse<List<GetManager>>>> AddManager(AddManager manager)
         {
             var response = await _managerService.AddManager(manager);
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpPut("{id}")]
@@ -55,22 +46,14 @@ namespace school_manager.Controllers
             }
 
             var response = await _managerService.UpdateManager(manager);
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<List<GetManager>>>> DeleteManager(int id)
         {
             var response = await _managerService.DeleteManager(id);
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
     }
 }

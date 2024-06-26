@@ -28,7 +28,7 @@ namespace school_manager.Service.ClassService
             }
             catch (Exception) {
                 response.Data = null;
-                response.Success = false;
+                response.Success = true;
                 response.Message = "Error add Class";
                 return response ;
             }
@@ -56,7 +56,7 @@ namespace school_manager.Service.ClassService
             var dataDelete = await _dataContext.Class.FirstOrDefaultAsync(x => x.ClassId == classID);
             if (dataDelete is null) {
                 response.Data = null;
-                response.Success = false;
+                response.Success = true;
                 response.Message = "Can not find Class";
                 return response;
             }
@@ -75,7 +75,7 @@ namespace school_manager.Service.ClassService
                 catch (Exception)
                 {
                     response.Data = null;
-                    response.Success = false;
+                    response.Success = true;
                     response.Message = "Delete Class Success but Error Get Class";
                     return response;
                 }
@@ -97,7 +97,7 @@ namespace school_manager.Service.ClassService
             if (dataFind is null)
             {
                 response.Data = null;
-                response.Success = false;
+                response.Success = true;
                 response.Message = "Can not find Class";
                 return response;
             }
@@ -155,7 +155,7 @@ namespace school_manager.Service.ClassService
                 if (data == null)
                 {
                     response.Data = null;
-                    response.Success = false;
+                    response.Success = true;
                     response.Message = "Can not find Class";
                     return response;
                 }
@@ -176,7 +176,7 @@ namespace school_manager.Service.ClassService
                     catch (Exception)
                     {
                         response.Data = null;
-                        response.Success = false;
+                        response.Success = true;
                         response.Message = "Update success but error Get List Class";
                         return response;
                     }

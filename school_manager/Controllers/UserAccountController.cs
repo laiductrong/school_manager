@@ -16,23 +16,17 @@ namespace school_manager.Controllers
             _accountService = accountService;
         }
         [HttpGet("Accounts")]
-        public async Task<ActionResult<ServiceResponse< List<GetAccount>>>> GetAccounts()
+        public async Task<ActionResult<ServiceResponse<List<GetAccount>>>> GetAccounts()
         {
             var response = await _accountService.GetAccounts();
-            if (!response.Success) { 
-                return BadRequest(response);
-            }
-            return Ok(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
+
         [HttpGet("StudentAccounts")]
         public async Task<ActionResult<ServiceResponse<List<GetAccount>>>> GetStudentAccounts()
         {
             var response = await _accountService.GetAccountStudents();
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
         [HttpGet("Login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login(AccountLogin account)

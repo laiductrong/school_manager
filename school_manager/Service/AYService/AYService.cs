@@ -30,7 +30,7 @@ namespace school_manager.Service.AYService
             catch (Exception)
             {
                 response.Data = null;
-                response.Success = false;
+                response.Success = true;
                 response.Message = "Error add Academic Year";
                 return response;
             }
@@ -56,7 +56,7 @@ namespace school_manager.Service.AYService
             if (dataDelete is null)
             {
                 response.Data = null;
-                response.Success = false;
+                response.Success = true;
                 response.Message = "Cannot find ID year";
                 return response;
             }
@@ -83,7 +83,15 @@ namespace school_manager.Service.AYService
             var response = new ServiceResponse<GetAY>();
             try
             {
-                response.Data = _mapper.Map<GetAY>(await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == year));
+                var data = await _dataContext.AcademicYear.FirstOrDefaultAsync(x => x.YearId == year);
+                if (data is null)
+                {
+                    response.Data = null;
+                    response.Success = true;
+                    response.Message = "Don't have ";
+                    return response;
+                }
+                response.Data = _mapper.Map<GetAY>(data);
                 response.Success = true;
                 response.Message = "Success";
                 return response;
@@ -126,7 +134,7 @@ namespace school_manager.Service.AYService
                 if (academicUpdate == null)
                 {
                     response.Data = null;
-                    response.Success = false;
+                    response.Success = true;
                     response.Message = "Can not find Academic Year";
                     return response;
                 }
@@ -144,7 +152,7 @@ namespace school_manager.Service.AYService
                     catch (Exception)
                     {
                         response.Data = null;
-                        response.Success = false;
+                        response.Success = true;
                         response.Message = "Update success but error get List Academic Year";
                         return response;
                     }

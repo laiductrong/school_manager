@@ -47,7 +47,7 @@ namespace school_manager.Service.UserAccountService
             catch (Exception ex)
             {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = ex.Message;
             }
             return response;
@@ -71,7 +71,7 @@ namespace school_manager.Service.UserAccountService
             }
             catch (Exception ex) { 
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = ex.Message;
             }
             return response;
@@ -96,7 +96,7 @@ namespace school_manager.Service.UserAccountService
             catch (Exception ex)
             {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = ex.Message;
             }
             return response;
@@ -121,7 +121,7 @@ namespace school_manager.Service.UserAccountService
             catch (Exception ex)
             {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = ex.Message;
             }
             return response;
@@ -136,7 +136,7 @@ namespace school_manager.Service.UserAccountService
             if (user == null)
             {
                 response.Data = null;
-                response.Success = false;
+                response.Success = true;
                 response.Message = "not found username";
                 return response;
             }
