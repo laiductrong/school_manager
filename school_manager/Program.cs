@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using school_manager.Data;
@@ -50,12 +50,28 @@ builder.Services.AddAuthentication().AddJwtBearer(options => {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
                  .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-        ValidateIssuer = false, // ??t l?i th�nh true n?u c?n x�c th?c Issuer
-        ValidateAudience = false, // ??t l?i th�nh true n?u c?n x�c th?c Audience
+        ValidateIssuer = false, // ??t l?i thành true n?u c?n xác th?c Issuer
+        ValidateAudience = false, // ??t l?i thành true n?u c?n xác th?c Audience
         ValidateLifetime = true
     };
 });
 // End Autho
+
+// Cross
+//cros
+builder.Services.AddCors(
+    options =>
+    {
+        options.AddPolicy("SchoolManagerOrigins", policyBuilber =>
+        {
+            policyBuilber.WithOrigins("http://localhost:4200/");
+            policyBuilber.AllowAnyHeader();
+            policyBuilber.AllowAnyMethod();
+            policyBuilber.AllowCredentials();
+        });
+    }
+    );
+// end cross
 
 // AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -86,6 +102,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors("SchoolManagerOrigins"); // Đăng ký middleware CORS
 
 app.MapControllers();
 
