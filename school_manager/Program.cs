@@ -59,18 +59,14 @@ builder.Services.AddAuthentication().AddJwtBearer(options => {
 
 // Cross
 //cros
-builder.Services.AddCors(
-    options =>
-    {
-        options.AddPolicy("SchoolManagerOrigins", policyBuilber =>
-        {
-            policyBuilber.WithOrigins("http://localhost:4200/");
-            policyBuilber.AllowAnyHeader();
-            policyBuilber.AllowAnyMethod();
-            policyBuilber.AllowCredentials();
-        });
-    }
-    );
+// Thêm dịch vụ CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("http://localhost:4200")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
 // end cross
 
 // AutoMapper
@@ -102,7 +98,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("SchoolManagerOrigins"); // Đăng ký middleware CORS
+// Áp dụng CORS policy
+app.UseCors("AllowSpecificOrigin");
 
 app.MapControllers();
 

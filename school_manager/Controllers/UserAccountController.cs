@@ -28,15 +28,11 @@ namespace school_manager.Controllers
             var response = await _accountService.GetAccountStudents();
             return response.Success ? Ok(response) : BadRequest(response);
         }
-        [HttpGet("Login")]
+        [HttpPost("Login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login(AccountLogin account)
         {
             var response = await _accountService.Login(account);
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
     }
 }
