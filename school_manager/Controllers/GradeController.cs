@@ -20,28 +20,28 @@ namespace school_manager.Controllers
         public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGrades()
         {
             var response = await _gradeService.GetGrades();
-            return response.Success ? Ok(response) : BadRequest(response);
+            return  Ok(response);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetGrade>>> GetGrade(int id)
         {
             var response = await _gradeService.GetGrade(id);
-            return response.Success ? Ok(response) : NotFound(response);
+            return Ok(response);
         }
 
         [HttpGet("ByStudent/{studentId}")]
         public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGradeByStudent(int studentId)
         {
             var response = await _gradeService.GetGradeByStudent(studentId);
-            return response.Success ? Ok(response) : BadRequest(response);
+            return Ok(response);
         }
 
         [HttpGet("ByTeacher/{teacherId}")]
         public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> GetGradeByTeacher(int teacherId)
         {
             var response = await _gradeService.GetGradeByTeacher(teacherId);
-            return response.Success ? Ok(response) : BadRequest(response);
+            return Ok(response);
         }
 
         [HttpGet("BySubject/{subjectId}")]

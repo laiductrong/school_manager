@@ -32,7 +32,7 @@ namespace school_manager.Controllers
         public async Task<ActionResult<ServiceResponse<string>>> Login(AccountLogin account)
         {
             var response = await _accountService.Login(account);
-            return response.Success ? Ok(response) : BadRequest(response);
+            return Ok(response);
         }
     }
 }

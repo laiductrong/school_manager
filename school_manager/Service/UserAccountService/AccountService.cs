@@ -136,7 +136,7 @@ namespace school_manager.Service.UserAccountService
             if (user == null)
             {
                 response.Data = null;
-                response.Success = true;
+                response.Success = false;
                 response.Message = "not found username";
                 return response;
             }
