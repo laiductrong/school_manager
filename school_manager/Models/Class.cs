@@ -16,7 +16,7 @@ namespace school_manager.Models
         public virtual AcademicYear AcademicYear { get; set; }
         [Column("teacher_id")]
         public int TeacherId { get; set; }
-        //public virtual Teacher Teacher { get; set; }
+        public virtual Teacher Teacher { get; set; }
         //public List<Student> Students { get; set; }
         //public List<ClassSchedule> ClassSchedules { get; set; }
     }

@@ -10,6 +10,7 @@ namespace school_manager.DTOs.ClassDTO
         //public virtual AcademicYear AcademicYear { get; set; }
         public string YearName { get; set; }
         public int TeacherId { get; set; }
+        public string TeacherName { get; set; }
         //public virtual Teacher Teacher { get; set; }
         //public List<Student> Students { get; set; }
         //public List<ClassSchedule> ClassSchedules { get; set; }

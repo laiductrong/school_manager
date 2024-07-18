@@ -43,7 +43,7 @@ namespace school_manager.Controllers
         public async Task<ActionResult<ServiceResponse<List<GetAY>>>> UpdateAY(UpdateAY updateAY)
         {
             var response =await _aYService.UpdateAY(updateAY);
-            return response.Success ? Ok(response) : BadRequest(response);
+            return  Ok(response) ;
         }
     }
 }
