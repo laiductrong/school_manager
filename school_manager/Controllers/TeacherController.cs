@@ -57,5 +57,11 @@ namespace school_manager.Controllers
             var response = await _teacherService.GetTeacherBySubject(subjectId);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+        [HttpGet("TeacherNoClass")]
+        public async Task<ActionResult<ServiceResponse<List<GetTeacher>>>> GetTeacherNoClass()
+        {
+            var reponse = await _teacherService.GetTeacherNoClass();
+            return Ok(reponse);
+        }
     }
 }

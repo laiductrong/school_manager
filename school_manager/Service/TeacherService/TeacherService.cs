@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using Microsoft.EntityFrameworkCore;
 using school_manager.Controllers;
 using school_manager.Data;
@@ -125,7 +126,30 @@ namespace school_manager.Service.TeacherService
                 return response;
             }              
         }
-
+        public async Task<ServiceResponse<List<GetTeacher>>> GetTeacherNoClass()
+        {
+            var reponse = new ServiceResponse<List<GetTeacher>>();
+            try
+            {
+                var data = await _dataContext.Teacher.Where(t => ! _dataContext.Class.Any(c => c.TeacherId == t.TeacherId)).ToListAsync();
+                if(data is null)
+                {
+                    reponse.Data = null;
+                    reponse.Success = true;
+                    reponse.Message = "Don't have";
+                    return reponse;
+                }
+                reponse.Data = data.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
+                reponse.Success = true;
+                return reponse;
+            }
+            catch (Exception ex) {
+                reponse.Data= null;
+                reponse.Success = false;
+                reponse.Message = ex.Message;
+                return reponse;
+            }
+        }
         public async Task<ServiceResponse<GetTeacher>> GetById(int id)
         {
             var response = new ServiceResponse<GetTeacher>();
