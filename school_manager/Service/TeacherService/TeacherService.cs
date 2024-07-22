@@ -131,7 +131,7 @@ namespace school_manager.Service.TeacherService
             var reponse = new ServiceResponse<List<GetTeacher>>();
             try
             {
-                var data = await _dataContext.Teacher.Where(t => ! _dataContext.Class.Any(c => c.TeacherId == t.TeacherId)).ToListAsync();
+                var data = await _dataContext.Teacher.Where(t => ! _dataContext.Class.Any(c => c.TeacherId == t.TeacherId)).Include(t => t.Subject).ToListAsync();
                 if(data is null)
                 {
                     reponse.Data = null;
@@ -213,7 +213,7 @@ namespace school_manager.Service.TeacherService
             {
                 var dataUpdate = await _dataContext.Teacher
                 .Include(t => t.Subject)
-                .FirstOrDefaultAsync(t => t.SubjectId == teacher.SubjectId);
+                .FirstOrDefaultAsync(t => t.TeacherId == teacher.TeacherId);
                 if (dataUpdate is null)
                 {
                     response.Data = null;
@@ -221,33 +221,43 @@ namespace school_manager.Service.TeacherService
                     response.Message = "Can't find id";
                     return response;
                 }
-                dataUpdate.SubjectId = teacher.SubjectId;
-                dataUpdate.Name = teacher.Name;
-                dataUpdate.BirthDate = teacher.BirthDate;
-                dataUpdate.PhoneNumber = teacher.PhoneNumber;
-                dataUpdate.Email = teacher.Email;
-                dataUpdate.SubjectId = teacher.SubjectId;
-                await _dataContext.SaveChangesAsync();
                 try
                 {
-                    var dataTeacher = await _dataContext.Teacher.Include(t => t.Subject).ToListAsync();
-                    if (dataTeacher is null)
+                    //dataUpdate.SubjectId = teacher.SubjectId;
+                    dataUpdate.Name = teacher.Name;
+                    dataUpdate.BirthDate = teacher.BirthDate;
+                    dataUpdate.PhoneNumber = teacher.PhoneNumber;
+                    dataUpdate.Address = teacher.Address;
+                    dataUpdate.Email = teacher.Email;
+                    dataUpdate.SubjectId = teacher.SubjectId;
+                    await _dataContext.SaveChangesAsync();
+                    try
                     {
-                        response.Data = null;
+                        var dataTeacher = await _dataContext.Teacher.Include(t => t.Subject).ToListAsync();
+                        if (dataTeacher is null)
+                        {
+                            response.Data = null;
+                            response.Success = true;
+                            response.Message = "Get Teachers Fail";
+                            return response;
+                        }
+                        response.Data = dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
                         response.Success = true;
-                        response.Message = "Get Teachers Fail";
+                        response.Message = "Get Success";
                         return response;
                     }
-                    response.Data = dataTeacher.Select(t => _mapper.Map<GetTeacher>(t)).ToList();
-                    response.Success = true;
-                    response.Message = "Get Success";
-                    return response;
+                    catch (Exception)
+                    {
+                        response.Data = null;
+                        response.Success = false;
+                        response.Message = "Update Success but Error Get";
+                        return response;
+                    }
                 }
-                catch (Exception)
-                {
+                catch (Exception ex) {
                     response.Data = null;
                     response.Success = false;
-                    response.Message = "Update Success but Error Get";
+                    response.Message = ex.Message;
                     return response;
                 }
             }

@@ -121,7 +121,7 @@ namespace school_manager
                 .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId));
             CreateMap<AddAY, AcademicYear>()
                 .ForMember(dest => dest.YearName, opt => opt.MapFrom(src => src.YearName));
-                
+            
 
 
         }
