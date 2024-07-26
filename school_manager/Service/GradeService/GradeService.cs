@@ -19,6 +19,34 @@ namespace school_manager.Service.GradeService
         public async Task<ServiceResponse<List<GetGrade>>> AddGrade(AddGrade addGrade)
         {
             var response = new ServiceResponse<List<GetGrade>>();
+            //check exits
+            try
+            {
+                var dataCheck =await _dataContext.Grade
+                    .Include(g => g.Student)
+                    .Include(g => g.Year)
+                    .Include(g => g.Teacher)
+                        .ThenInclude(g => g.Subject)
+                        .FirstOrDefaultAsync(
+                            g => g.StudentId == addGrade.StudentId 
+                            && g.YearId ==addGrade.YearId 
+                            && g.TeacherId == addGrade.TeacherId
+                            );
+                if (dataCheck != null) {
+                    response.Data = null;
+                    response.Success = true;
+                    response.Message = "Graden exits";
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = true;
+                response.Message = ex.Message;
+                return response;
+            }
+            //
             try
             {
                 var add = _mapper.Map<Grade>(addGrade);
@@ -30,6 +58,7 @@ namespace school_manager.Service.GradeService
                         .Include(g => g.Student)
                         .Include(g => g.Teacher)
                             .ThenInclude(t => t.Subject)
+                        .Include(g => g.Year)
                         .ToListAsync();
                     if (dataGrade == null || !dataGrade.Any())
                     {
@@ -69,6 +98,7 @@ namespace school_manager.Service.GradeService
                     .Include(g => g.Student)
                     .Include(g => g.Teacher)
                         .ThenInclude(g => g.Subject)
+                    .Include(g => g.Year)
                         .FirstOrDefaultAsync(g => g.GradeId == GradeId);
                 if (dataDelete == null)
                 {
@@ -115,6 +145,7 @@ namespace school_manager.Service.GradeService
             {
                 var dataGrade = await _dataContext.Grade
                     .Include(g => g.Student)
+                    .Include(g => g.Year)
                     .Include(g => g.Teacher)
                         .ThenInclude(g => g.Subject)
                         .FirstOrDefaultAsync(g => g.GradeId == id);
@@ -146,6 +177,7 @@ namespace school_manager.Service.GradeService
             {
                 var dataGrade = await _dataContext.Grade
                     .Include(g => g.Student)
+                    .Include(g => g.Year)
                     .Include(g => g.Teacher)
                         .ThenInclude(g => g.Subject)
                         .Where(g => g.Teacher.SubjectId == subjectId)
@@ -179,6 +211,7 @@ namespace school_manager.Service.GradeService
                 var dataGrade = await _dataContext.Grade
                 .Where(g => g.StudentId == studentId) // Apply filter for the specific teacher
                     .Include(g => g.Student)
+                    .Include(g => g.Year)
                     .Include(g => g.Teacher)
                         .ThenInclude(g => g.Subject)
                     .ToListAsync();
@@ -211,6 +244,7 @@ namespace school_manager.Service.GradeService
                 var dataGrade = await _dataContext.Grade
                     .Where(g => g.TeacherId == teacherId) // Apply filter for the specific teacher
                     .Include(g => g.Student)
+                    .Include(g => g.Year)
                     .Include(g => g.Teacher)
                         .ThenInclude(g => g.Subject)
                     .ToListAsync();
@@ -244,6 +278,7 @@ namespace school_manager.Service.GradeService
                     .Include(g => g.Student)
                     .Include(g => g.Teacher)
                         .ThenInclude(t => t.Subject)
+                    .Include(g => g.Year)
                     .ToListAsync();
                 if (dataGrade == null || !dataGrade.Any())
                 {
@@ -268,6 +303,34 @@ namespace school_manager.Service.GradeService
         public async Task<ServiceResponse<List<GetGrade>>> UpdateGrade(UpdateGrade updateGrade)
         {
             var response = new ServiceResponse<List<GetGrade>>();
+            //check exits
+            try
+            {
+                var dataCheck = await _dataContext.Grade
+                    .Include(g => g.Student)
+                    .Include(g => g.Year)
+                    .Include(g => g.Teacher)
+                        .ThenInclude(g => g.Subject)
+                        .FirstOrDefaultAsync(
+                            g => g.StudentId == updateGrade.StudentId
+                            && g.YearId == updateGrade.YearId
+                            && g.TeacherId == updateGrade.TeacherId
+                            );
+                if (dataCheck != null)
+                {
+                    response.Data = null;
+                    response.Success = true;
+                    response.Message = "Graden exits";
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = true;
+                response.Message = ex.Message;
+                return response;
+            }
             try
             {
                 // Retrieve the existing grade
@@ -284,6 +347,7 @@ namespace school_manager.Service.GradeService
                 grade.TeacherId = updateGrade.TeacherId;
                 grade.StudentId = updateGrade.StudentId;
                 grade.Score = updateGrade.Score;
+                grade.YearId = updateGrade.YearId;
 
                 // Save changes to the database
                 _dataContext.Grade.Update(grade);
@@ -292,6 +356,7 @@ namespace school_manager.Service.GradeService
                 // Retrieve the updated list of grades
                 var dataGrade = await _dataContext.Grade
                     .Include(g => g.Student)
+                    .Include(g => g.Year)
                     .Include(g => g.Teacher)
                         .ThenInclude(t => t.Subject)
                     .ToListAsync();

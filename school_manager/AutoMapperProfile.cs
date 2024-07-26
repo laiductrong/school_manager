@@ -53,7 +53,9 @@ namespace school_manager
                 .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.Student.Name))
                 .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId))
                 .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => src.Teacher.Name))
-                .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Teacher.Subject.Name));
+                .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Teacher.Subject.Name))
+                .ForMember(dest => dest.YearId, opt => opt.MapFrom(src => src.YearId))
+                .ForMember(dest => dest.YearName, opt => opt.MapFrom(src => src.Year.YearName));
             CreateMap<Manager, GetManager>()
                 .ForMember(dest => dest.ManagerId, opt => opt.MapFrom(src => src.ManagerId))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Teacher.Name))
@@ -114,7 +116,9 @@ namespace school_manager
             CreateMap<AddGrade, Grade>()
                 .ForMember(dest => dest.StudentId, opt => opt.MapFrom(src => src.StudentId))
                 .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId))
-                .ForMember(dest => dest.Score, opt => opt.MapFrom(src => src.Score));
+                .ForMember(dest => dest.Score, opt => opt.MapFrom(src => src.Score))
+                .ForMember(dest => dest.YearId, opt => opt.MapFrom(src => src.YearId));
+
             CreateMap<AddClass, Class>()
                 .ForMember(dest => dest.ClassName, opt => opt.MapFrom(src => src.ClassName))
                 .ForMember(dest => dest.AcademicYearYearId, opt => opt.MapFrom(src => src.YearId))

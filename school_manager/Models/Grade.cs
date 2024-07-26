@@ -17,5 +17,8 @@ namespace school_manager.Models
         public Teacher Teacher { get; set; }
         [Column("score")]
         public decimal Score { get; set; }
+        [Column("year_id")]
+        public int YearId { get; set; }
+        public virtual AcademicYear Year { get; set; }
     }
 }
