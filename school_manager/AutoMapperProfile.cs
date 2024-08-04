@@ -74,6 +74,19 @@ namespace school_manager
                   .ForMember(dest => dest.StudentId, opt => opt.MapFrom(src => src.StudentId))
                   .ForMember(dest => dest.TeacherId, opt => opt.MapFrom(src => src.TeacherId))
                   .ForMember(dest => dest.ManagerId, opt => opt.MapFrom(src => src.ManagerId));
+            CreateMap<Payment, GetPayment>()
+                .ForMember(dest => dest.PaymentId, opt => opt.MapFrom(src => src.PaymentId))
+                .ForMember(dest => dest.StudentId, opt => opt.MapFrom(src => src.StudentId))
+                .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.Student.Name))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.YearId, opt => opt.MapFrom(src => src.AcademicYearYearId))
+                .ForMember(dest => dest.YearName, opt => opt.MapFrom(src => src.AcademicYear.YearName));
+                
+                
+                
 
             //Mapper for function Add
             CreateMap<AddAccount, UserAccount>()

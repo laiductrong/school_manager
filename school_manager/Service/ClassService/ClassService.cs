@@ -5,6 +5,7 @@ using school_manager.Data;
 using school_manager.DTOs.AcademicYearDTO;
 using school_manager.DTOs.ClassDTO;
 using school_manager.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace school_manager.Service.ClassService
 {
@@ -145,7 +146,7 @@ namespace school_manager.Service.ClassService
                     .Include(c => c.AcademicYear)
                     .Include(c => c.Teacher)
                     .Where(x => x.AcademicYearYearId == idAY).ToListAsync();
-                response.Data = classes.Select(c => _mapper.Map<GetClass>(c)).ToList();
+                response.Data = classes.Select(x => _mapper.Map<GetClass>(x)).ToList();
                 response.Success = true;
                 response.Message = "Get Class Success";
                 return response;
