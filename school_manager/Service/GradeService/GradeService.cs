@@ -316,11 +316,11 @@ namespace school_manager.Service.GradeService
                             && g.YearId == updateGrade.YearId
                             && g.TeacherId == updateGrade.TeacherId
                             );
-                if (dataCheck != null)
+                if (dataCheck == null)
                 {
                     response.Data = null;
                     response.Success = true;
-                    response.Message = "Graden exits";
+                    response.Message = "Graden not exits";
                     return response;
                 }
             }

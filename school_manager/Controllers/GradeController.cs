@@ -23,7 +23,7 @@ namespace school_manager.Controllers
             return  Ok(response);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("FindGrade/{id}")]
         public async Task<ActionResult<ServiceResponse<GetGrade>>> GetGrade(int id)
         {
             var response = await _gradeService.GetGrade(id);
@@ -58,14 +58,14 @@ namespace school_manager.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        [HttpPut("UpdateGrade")]
+        [HttpPut("Update")]
         public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> UpdateGrade(UpdateGrade updateGrade)
         {
             var response = await _gradeService.UpdateGrade(updateGrade);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        [HttpDelete("{gradeId}")]
+        [HttpDelete("Delete/{gradeId}")]
         public async Task<ActionResult<ServiceResponse<List<GetGrade>>>> DeleteGrade(int gradeId)
         {
             var response = await _gradeService.DeleteGrade(gradeId);
