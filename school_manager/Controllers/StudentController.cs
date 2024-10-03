@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using school_manager.DTOs.StudentDTO;
+using school_manager.Models;
 using school_manager.Service.StudentService;
 
 namespace school_manager.Controllers
@@ -55,6 +56,12 @@ namespace school_manager.Controllers
         public async Task<ActionResult<ServiceResponse<List<GetStudent>>>> GetStudentsByClass(int classId)
         {
             var response = await _studentService.GetStudentByClass(classId);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+        [HttpGet("GetStudentByPage")]
+        public async Task<ActionResult<ServiceResponse<PaginatedList<GetStudent>>>> GetStudents(int pageIndex = 1, int pageSize = 10)
+        {
+            var response = await _studentService.GetAllByPage(pageIndex, pageSize);
             return response.Success ? Ok(response) : BadRequest(response);
         }
     }

@@ -142,6 +142,45 @@ namespace school_manager.Service.StudentService
                 return response;
             }
         }
+        public async Task<ServiceResponse<PaginatedList<GetStudent>>> GetAllByPage(int pageIndex, int pageSize)
+        {
+            var response = new ServiceResponse<PaginatedList<GetStudent>>();
+            try
+            {
+                // Lấy dữ liệu sinh viên với phân trang
+                var dataStudent = await _dataContext.Student
+                    .Include(s => s.Class)
+                    .Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                // Lấy tổng số sinh viên để tính toán phân trang
+                var totalCount = await _dataContext.Student.CountAsync();
+
+                if (dataStudent is null || !dataStudent.Any())
+                {
+                    response.Data = new PaginatedList<GetStudent>(new List<GetStudent>(), totalCount, pageIndex, pageSize);
+                    response.Success = true;
+                    response.Message = "No students found.";
+                    return response;
+                }
+
+                // Chuyển đổi dữ liệu sang DTO
+                var mappedStudents = dataStudent.Select(s => _mapper.Map<GetStudent>(s)).ToList();
+                response.Data = new PaginatedList<GetStudent>(mappedStudents, totalCount, pageIndex, pageSize);
+                response.Success = true;
+                response.Message = "Get Success";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
 
         public async Task<ServiceResponse<GetStudent>> GetById(int id)
         {
