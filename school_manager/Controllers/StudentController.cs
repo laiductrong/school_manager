@@ -64,6 +64,12 @@ namespace school_manager.Controllers
             var response = await _studentService.GetAllByPage(pageIndex, pageSize);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+        [HttpGet("FindByName")]
+        public async Task<ActionResult< ServiceResponse<List<GetStudent>>>> GetByName(string name)
+        {
+            var reponse = await _studentService.GetByName(name);
+            return reponse.Success ? Ok(reponse) : NotFound(reponse);
+        }
     }
 
 }

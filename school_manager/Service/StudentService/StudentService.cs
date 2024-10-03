@@ -210,6 +210,38 @@ namespace school_manager.Service.StudentService
                 return response;
             }
         }
+        public async Task<ServiceResponse<List<GetStudent>>> GetByName(string name)
+        {
+            var response = new ServiceResponse<List<GetStudent>>();
+            try
+            {
+                var dataStudents = await _dataContext.Student
+                    .Include(s => s.Class)
+                    .Where(s => s.Name.ToLower().Contains(name.ToLower()))                    // Tìm kiếm theo tên
+                    .ToListAsync();
+
+                if (dataStudents == null || !dataStudents.Any())
+                {
+                    response.Data = new List<GetStudent>(); // Trả về danh sách rỗng
+                    response.Success = true;
+                    response.Message = "No students found with the given name.";
+                    return response;
+                }
+
+                response.Data = dataStudents.Select(s => _mapper.Map<GetStudent>(s)).ToList();
+                response.Success = true;
+                response.Message = "Find Students Success";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
 
         public async Task<ServiceResponse<List<GetStudent>>> GetStudentByClass(int classId)
         {
