@@ -173,5 +173,34 @@ namespace school_manager.Service.AYService
                 return response;
             }
         }
+        public async Task<ServiceResponse<List<GetAY>>> FindByYear(string nameYear)
+        {
+            var reponse = new ServiceResponse<List< GetAY>>();
+            try
+            {
+                var data = (await _dataContext.AcademicYear
+                    .Where(a => (a.YearName).ToLower().Contains(nameYear.ToLower()))
+                    .ToListAsync())
+                    .Select(x => _mapper.Map<GetAY>(x))
+                    .ToList();
+                if (data != null)
+                {
+                    reponse.Data = data;
+                    reponse.Success = true;
+                    reponse.Message = "Find success";
+                }
+                else {
+                    reponse.Data = null;
+                    reponse.Success = true;
+                    reponse.Message = "Don't have year";
+                }
+                return reponse;
+            }
+            catch (Exception) {
+                reponse.Data = null;
+                reponse.Success = false;
+                reponse.Message = "Error find Academic Year";
+                return reponse;
+            }
     }
 }

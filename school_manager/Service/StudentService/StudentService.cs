@@ -241,6 +241,41 @@ namespace school_manager.Service.StudentService
                 return response;
             }
         }
+        public async Task<ServiceResponse<List<GetStudent>>> GetAllSorted(bool sortAscending = true)
+        {
+            var response = new ServiceResponse<List<GetStudent>>();
+            try
+            {
+                var dataStudents = await _dataContext.Student
+                    .Include(s => s.Class)
+                    .ToListAsync();
+
+                if (dataStudents == null || !dataStudents.Any())
+                {
+                    response.Data = new List<GetStudent>();
+                    response.Success = true;
+                    response.Message = "No students found.";
+                    return response;
+                }
+
+                // Sắp xếp danh sách sinh viên theo tên
+                response.Data = sortAscending
+                    ? dataStudents.OrderBy(s => s.Name).Select(s => _mapper.Map<GetStudent>(s)).ToList()
+                    : dataStudents.OrderByDescending(s => s.Name).Select(s => _mapper.Map<GetStudent>(s)).ToList();
+
+                response.Success = true;
+                response.Message = "Students retrieved and sorted successfully.";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
 
 
         public async Task<ServiceResponse<List<GetStudent>>> GetStudentByClass(int classId)

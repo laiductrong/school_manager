@@ -10,5 +10,6 @@ namespace school_manager.Service.AYService
         Task<ServiceResponse<List<GetAY>>> UpdateAY(UpdateAY updateAY);
         Task<ServiceResponse<List<GetAY>>> DeleteAY(int year);
         Task<ServiceResponse<List<GetAY>>> AddAY(AddAY addAY);
+        Task<ServiceResponse<List<GetAY>>> FindByYear(string nameYear);
     }
 }

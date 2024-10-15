@@ -45,5 +45,16 @@ namespace school_manager.Controllers
             var response =await _aYService.UpdateAY(updateAY);
             return  Ok(response) ;
         }
+        [HttpGet("FindAcademic")]
+        public async Task<ActionResult<ServiceResponse<List<GetAY>>>> FindAcademic(string yearName)
+        {
+            if (string.IsNullOrWhiteSpace(yearName))
+            {
+                return NotFound();
+            } else {
+                var reponse = await _aYService.FindByYear(yearName);
+                return reponse.Success? Ok(reponse): NotFound(reponse);
+            }
+        }
     }
 }
