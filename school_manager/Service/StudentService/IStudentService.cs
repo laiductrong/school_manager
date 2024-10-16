@@ -15,6 +15,7 @@ namespace school_manager.Service.StudentService
         Task<ServiceResponse<List<GetStudent>>> GetStudentByClass(int classId);
         Task<ServiceResponse<PaginatedList<GetStudent>>> GetAllByPage(int pageIndex, int pageSize);
         Task<ServiceResponse<List<GetStudent>>> GetByName(string name);
+        Task<ServiceResponse<string>> ExportStudentsToExcel();
 
 
     }

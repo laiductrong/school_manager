@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using school_manager.DTOs.StudentDTO;
 using school_manager.Models;
@@ -69,6 +70,18 @@ namespace school_manager.Controllers
         {
             var reponse = await _studentService.GetByName(name);
             return reponse.Success ? Ok(reponse) : NotFound(reponse);
+        }
+        [HttpGet("export")]
+        public async Task<ActionResult<ServiceResponse<string>>> ExportExcel()
+        {
+            var result = await _studentService.ExportStudentsToExcel();
+            if (!result.Success)
+            {
+                return BadRequest();
+            }
+            return Ok(result);
+            //var bytes = System.IO.File.ReadAllBytes(result.Data); // Đọc file Excel vừa xuất
+            //return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Students.xlsx");
         }
     }
 

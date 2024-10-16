@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ClosedXML.Excel;
 using Microsoft.EntityFrameworkCore;
 using school_manager.Controllers;
 using school_manager.Data;
@@ -361,6 +362,61 @@ namespace school_manager.Service.StudentService
                 return response;
             }
         }
+        public async Task<ServiceResponse<string>> ExportStudentsToExcel()
+        {
+            var response = new ServiceResponse<string>();
+            try
+            {
+                var dataStudent = await _dataContext.Student.Include(s => s.Class).ToListAsync();
+
+                if (dataStudent is null || !dataStudent.Any())
+                {
+                    response.Data = null;
+                    response.Success = false;
+                    response.Message = "No students found";
+                    return response;
+                }
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "ExportedStudents.xlsx");
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Students");
+                    worksheet.Cell(1, 1).Value = "StudentId";
+                    worksheet.Cell(1, 2).Value = "Name";
+                    worksheet.Cell(1, 3).Value = "BirthDay";
+                    worksheet.Cell(1, 4).Value = "Address";
+                    worksheet.Cell(1, 5).Value = "Phone";
+                    worksheet.Cell(1, 6).Value = "Email";
+                    worksheet.Cell(1, 7).Value = "Class";
+
+                    for (int i = 0; i < dataStudent.Count; i++)
+                    {
+                        worksheet.Cell(i + 2, 1).Value = dataStudent[i].StudentId;
+                        worksheet.Cell(i + 2, 2).Value = dataStudent[i].Name;
+                        worksheet.Cell(i + 2, 3).Value = dataStudent[i].BirthDate;
+                        worksheet.Cell(i + 2, 4).Value = dataStudent[i].Address;
+                        worksheet.Cell(i + 2, 5).Value = dataStudent[i].PhoneNumber;
+                        worksheet.Cell(i + 2, 6).Value = dataStudent[i].Email;
+                        worksheet.Cell(i + 2, 7).Value = dataStudent[i].Class.ClassName;
+                    }
+
+                    workbook.SaveAs(filePath);
+                }
+
+                response.Data = filePath;
+                response.Success = true;
+                response.Message = "Students exported to Excel successfully";
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
     }
 
 }
