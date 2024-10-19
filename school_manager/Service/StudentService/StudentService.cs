@@ -416,6 +416,33 @@ namespace school_manager.Service.StudentService
             }
             return response;
         }
+        public async Task<ServiceResponse<List<GetStudent>>> GetStudentByAge(int startAge, int endAge)
+        {
+            var reponse = new ServiceResponse<List<GetStudent>>();
+            try {
+                var students = await _dataContext.Student
+                    .Where(s => EF.Functions.DateDiffYear(s.BirthDate, DateTime.Today) >= startAge &&
+                                EF.Functions.DateDiffYear(s.BirthDate, DateTime.Today) <= endAge)
+                    .Include(s => s.Class)
+                    .ToListAsync();
+                if (students.Count > 0) { 
+                    reponse.Data = students.Select(s => _mapper.Map<GetStudent>(s)).ToList();
+                    reponse.Success = true;
+                    reponse.Message = "Find success";
+                }
+                else
+                {
+                    reponse.Data = null;
+                    reponse.Success = true;
+                    reponse.Message = "Don't have student";
+                }
+            } catch (Exception) {
+                reponse.Data = null;
+                reponse.Success = true;
+                reponse.Message = "Error";
+            }
+            return reponse;
+        }
 
     }
 

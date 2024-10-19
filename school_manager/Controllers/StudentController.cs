@@ -83,6 +83,14 @@ namespace school_manager.Controllers
             //var bytes = System.IO.File.ReadAllBytes(result.Data); // Đọc file Excel vừa xuất
             //return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Students.xlsx");
         }
+        [HttpGet("findByAge")]
+        public async Task<ActionResult<ServiceResponse<List<GetStudent>>>> FindByAge(int startAge, int endAge)
+        {
+            if (startAge < 0 || endAge < 0 || startAge > endAge || !int.TryParse(startAge.ToString(), out int startAgeParsed) || !int.TryParse(endAge.ToString(), out int endAgeParsed))
+                return BadRequest();
+            var result = await _studentService.GetStudentByAge(startAge, endAge);
+            return Ok(result);
+        }
     }
 
 }

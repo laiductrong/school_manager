@@ -16,6 +16,10 @@ namespace school_manager.Service.StudentService
         Task<ServiceResponse<PaginatedList<GetStudent>>> GetAllByPage(int pageIndex, int pageSize);
         Task<ServiceResponse<List<GetStudent>>> GetByName(string name);
         Task<ServiceResponse<string>> ExportStudentsToExcel();
+        Task<ServiceResponse<List<GetStudent>>> GetStudentByAge(int startAge, int endAge);
+        //tìm kiếm sv theo độ tuổi
+        //Lấy danh sách sinh viên theo điểm trung bình
+        //Thêm một danh sách sinh viên từ file (CSV, Excel):
 
 
     }
