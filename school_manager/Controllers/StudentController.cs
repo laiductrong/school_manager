@@ -7,10 +7,12 @@ using school_manager.Service.StudentService;
 
 namespace school_manager.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class StudentController : ControllerBase
     {
+        const long MaxFileSize = 5 * 1024 * 1024; // Giới hạn kích thước tệp: 5 MB
         private readonly IStudentService _studentService;
 
         public StudentController(IStudentService studentService)
@@ -66,7 +68,7 @@ namespace school_manager.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
         [HttpGet("FindByName")]
-        public async Task<ActionResult< ServiceResponse<List<GetStudent>>>> GetByName(string name)
+        public async Task<ActionResult<ServiceResponse<List<GetStudent>>>> GetByName(string name)
         {
             var reponse = await _studentService.GetByName(name);
             return reponse.Success ? Ok(reponse) : NotFound(reponse);
@@ -90,6 +92,24 @@ namespace school_manager.Controllers
                 return BadRequest();
             var result = await _studentService.GetStudentByAge(startAge, endAge);
             return Ok(result);
+        }
+        [HttpPost("Import")]
+        public async Task<IActionResult> ImportStudentsFromExcel(IFormFile file)
+        {
+            if (!Path.GetExtension(file.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest();
+            }
+            if (file.Length > MaxFileSize)
+            {
+                return BadRequest($"File size exceeds the maximum limit of {MaxFileSize / (1024 * 1024)} MB.");
+            }
+            var result = await _studentService.ImportStudentsFromExcelMethod(file);
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Message);
         }
     }
 

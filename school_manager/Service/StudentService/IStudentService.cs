@@ -19,7 +19,7 @@ namespace school_manager.Service.StudentService
         Task<ServiceResponse<List<GetStudent>>> GetStudentByAge(int startAge, int endAge);
         //tìm kiếm sv theo độ tuổi
         //Lấy danh sách sinh viên theo điểm trung bình
-        //Thêm một danh sách sinh viên từ file (CSV, Excel):
+        Task<ServiceResponse<string>> ImportStudentsFromExcelMethod(IFormFile file);
 
 
     }

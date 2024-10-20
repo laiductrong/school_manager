@@ -22,19 +22,20 @@ namespace school_manager.Service.StudentService
         public async Task<ServiceResponse<List<GetStudent>>> AddStudent(AddStudent student)
         {
             var response = new ServiceResponse<List<GetStudent>>();
-            var studentAdd = new Student
-            {
-                Name = student.Name,
-                Address = student.Address,
-                BirthDate = student.BirthDate,
-                PhoneNumber = student.PhoneNumber,
-                Email = student.Email,
-                ClassId = student.ClassId
-            };
+            //var studentAdd = new Student
+            //{
+            //    Name = student.Name,
+            //    Address = student.Address,
+            //    BirthDate = student.BirthDate,
+            //    PhoneNumber = student.PhoneNumber,
+            //    Email = student.Email,
+            //    ClassId = student.ClassId
+            //};
 
             try
             {
-                await _dataContext.Student.AddAsync(studentAdd);
+                var addStudent = _mapper.Map<Student>(student);
+                await _dataContext.Student.AddAsync(addStudent);
                 await _dataContext.SaveChangesAsync();
 
                 try
@@ -443,6 +444,79 @@ namespace school_manager.Service.StudentService
             }
             return reponse;
         }
+        public async Task<ServiceResponse<string>> ImportStudentsFromExcelMethod(IFormFile file)
+        {
+            var response = new ServiceResponse<string>();
+            var filePath = "";
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    response.Data = null;
+                    response.Success = false;
+                    response.Message = "No file uploaded";
+                    return response;
+                }
+
+                filePath = Path.Combine(Directory.GetCurrentDirectory(), file.FileName);
+
+                // Lưu file tạm thời vào thư mục hiện tại
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                using (var workbook = new XLWorkbook(filePath))
+                {
+                    var worksheet = workbook.Worksheet(1); // Lấy worksheet đầu tiên
+                    var rows = worksheet.RowsUsed();
+
+                    List<Student> students = new List<Student>();
+
+                    foreach (var row in rows.Skip(1)) // Bỏ qua hàng đầu tiên (header)
+                    {
+                        var student = new Student
+                        {
+                            //StudentId = row.Cell(1).GetValue<int>(),
+                            Name = row.Cell(2).GetValue<string>() ?? string.Empty,
+                            BirthDate = row.Cell(3).GetValue<DateTime?>(),
+                            Address = row.Cell(4).GetValue<string>() ?? string.Empty,
+                            PhoneNumber = row.Cell(5).GetValue<string>() ?? string.Empty,
+                            Email = row.Cell(6).GetValue<string>() ?? string.Empty,
+                            ClassId = row.Cell(7).GetValue<int?>()
+                        };
+
+                        students.Add(student);
+                    }
+
+                    // Thêm sinh viên vào database
+                    await _dataContext.Student.AddRangeAsync(students);
+                    await _dataContext.SaveChangesAsync();
+                }
+
+                response.Data = "Import successful";
+                response.Success = true;
+                response.Message = "Students imported successfully from Excel";
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            finally
+            {
+                // Xóa file tạm sau khi xử lý xong
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
+
+            return response;
+        }
+
+
 
     }
 
